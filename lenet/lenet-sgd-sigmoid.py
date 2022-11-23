@@ -18,7 +18,7 @@ ds_train = ds_train.map(
     normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
 ds_train = ds_train.cache()
 ds_train = ds_train.shuffle(ds_info.splits['train'].num_examples)
-ds_train = ds_train.batch(128)
+ds_train = ds_train.batch(32)
 ds_train = ds_train.prefetch(tf.data.AUTOTUNE)
 
 ds_test = ds_test.map(
@@ -42,7 +42,7 @@ model = tf.keras.models.Sequential([
 ])
 
 model.compile(
-    optimizer=tf.keras.optimizers.SGD(0.001),
+    optimizer=tf.keras.optimizers.SGD(1e0),
     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
     metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
 )
