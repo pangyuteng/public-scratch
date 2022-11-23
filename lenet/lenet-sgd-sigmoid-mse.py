@@ -18,7 +18,7 @@ ds_train = ds_train.map(
     normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
 ds_train = ds_train.cache()
 ds_train = ds_train.shuffle(ds_info.splits['train'].num_examples)
-ds_train = ds_train.batch(128)
+ds_train = ds_train.batch(32)
 ds_train = ds_train.prefetch(tf.data.AUTOTUNE)
 
 ds_test = ds_test.map(
@@ -32,23 +32,23 @@ ds_test = ds_test.prefetch(tf.data.AUTOTUNE)
 # tanh? original paper is sigmoid!
 model = tf.keras.models.Sequential([
   tf.keras.layers.Conv2D(filters=6, kernel_size=(5,5), padding='same', activation='sigmoid', input_shape=(28, 28, 1)),
-  tf.keras.layers.MaxPool2D(strides=2),
+  tf.keras.layers.MaxPool2D(strides=2), # AveragePooling2D
   tf.keras.layers.Conv2D(filters=16, kernel_size=(5,5), padding='same', activation='sigmoid'),
-  tf.keras.layers.MaxPool2D(strides=2),
+  tf.keras.layers.MaxPool2D(strides=2), # AveragePooling2D
   tf.keras.layers.Flatten(),
   tf.keras.layers.Dense(120, activation='sigmoid'),
   tf.keras.layers.Dense(84, activation='sigmoid'),
   tf.keras.layers.Dense(10, activation='softmax')
 ])
 
+# mse ???
 def custom_loss(y_true, y_pred):
     y_true = tf.one_hot(y_true,10)
     loss = tf.reduce_mean(tf.math.square(y_true-y_pred))
     return loss
-  
-# mse ???
+# loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
 model.compile(
-    optimizer=tf.keras.optimizers.SGD(0.001),
+    optimizer=tf.keras.optimizers.SGD(1e0),
     loss=custom_loss,
     metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
 )
