@@ -12,4 +12,4 @@ RUN pip install tensorflow_addons
 
 # per matplotlib warning adding below, and cache .json file.
 ENV MPLCONFIGDIR=/opt/.config/matplotlib
-RUN python -c "import matplotlib.pyplot"
+RUN chmod -R 777 /opt/.config && python -c "import matplotlib.pyplot"
