@@ -9,3 +9,7 @@ RUN pip install -r requirements.txt
 
 RUN pip install git+https://www.github.com/keras-team/keras-contrib.git
 RUN pip install tensorflow_addons
+
+# per matplotlib warning adding below, and cache .json file.
+ENV MPLCONFIGDIR=/opt/.config/matplotlib
+RUN python -c "import matplotlib.pyplot"
