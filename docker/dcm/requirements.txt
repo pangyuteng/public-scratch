@@ -2,4 +2,4 @@ SimpleITK==2.2.0
 pydicom==2.1.2
 rt_utils==1.2.1
 vtk==9.2.5
-imageio=2.25.0
+imageio==2.25.0
