@@ -5,3 +5,4 @@ RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 RUN python -m pip install --upgrade pip
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+RUN pip install vtk-osmesa --extra-index-url https://gitlab.kitware.com/api/v4/projects/13/packages/pypi/simple

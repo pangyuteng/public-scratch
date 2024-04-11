@@ -1,15 +1,20 @@
 
 
-general-ml purpose container 
+## general purpose container for dicom and image manipulation
 
-TODO: make a torch version as well
 
-```
-docker pull pangyuteng/ml
-```
 
 ```
-docker build -t pangyuteng/ml:latest .
-docker push pangyuteng/ml:latest
+
+bash build_and_push.sh
+
+```
+
+
+#### ref
+
+```
+
+https://github.com/pyvista/pyvista/discussions/4024
 
 ```
