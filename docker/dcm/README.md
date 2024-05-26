@@ -1,6 +1,6 @@
 
 
-## general purpose container for dicom and image manipulation
+## general purpose container for dicom and image manipulation, and report generation
 
 
 
