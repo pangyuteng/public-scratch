@@ -1,6 +1,10 @@
 FROM tensorflow/tensorflow:2.9.1-gpu-jupyter
 
-RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 build-essential make vim wkhtmltopdf -yq
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 build-essential make vim curl wget -yq
+
+WORKDIR /opt
+RUN wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.focal_amd64.deb && \
+    apt install ./wkhtmltox_0.12.6-1.focal_amd64.deb -yq
 
 RUN python -m pip install --upgrade pip
 COPY requirements.txt .
