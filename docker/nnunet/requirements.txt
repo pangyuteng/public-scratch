@@ -1,0 +1,4 @@
+torchvision
+torchaudio
+nnunetv2>=2.5.1
+hiddenlayer>v0.2
