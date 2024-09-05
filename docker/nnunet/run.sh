@@ -11,9 +11,9 @@ export nnUNet_results="/radraid/pteng/tmp/nnUNet_results"
 
 export TORCH_HOME=/tmp/.torch
 export XDG_CACHE_HOME=/tmp/.xdgcache
-# export TRITON_HOME=/tmp/.tritonhome
-# export TRITON_CACHE_DIR=/tmp/.triton
-# export TORCHINDUCTOR_CACHE_DIR=/tmp/.torchinductor
+export TRITON_HOME=/tmp/.tritonhome
+export TRITON_CACHE_DIR=/tmp/.triton
+export TORCHINDUCTOR_CACHE_DIR=/tmp/.torchinductor
 
 python -c "import torch;print(torch.__version__)"
 nnUNetv2_plan_and_preprocess -d 001 --verify_dataset_integrity
