@@ -15,6 +15,7 @@ request_gpus = 1
 request_memory = 24GB
 request_disk = 1024MB
 requirements = (OpSys == "LINUX" && Arch == "X86_64" && GPUMEM > 12000)
++DevShmSize = 8589934592
 
 arguments = "hello nnunet"
 queue
