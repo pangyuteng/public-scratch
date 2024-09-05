@@ -9,6 +9,8 @@ mkdir log
 # sample dataset used copied from totalsegmentator.
 # for test dataset folder/files, see `sample_dataset.md` and `dataset.json`
 # unsure about dataset.json and hola.json, but i just made them to have the same content.
+nnUNet_raw/Dataset001_hola/dataset.json
+nnUNet_preprocessed/Dataset001_hola/dataset.json
 
 condor_submit condor.sub
 
