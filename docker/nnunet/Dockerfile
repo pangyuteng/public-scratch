@@ -5,4 +5,14 @@ RUN pip install -r /tmp/requirements.txt
 RUN apt update && apt install git -yq
 RUN pip install --upgrade git+https://github.com/FabianIsensee/hiddenlayer.git
 
-RUN pip install SimpleITK==2.2.1
+ARG GROUPID
+ARG USERID
+ARG USERNAME
+
+USER root
+RUN groupadd -g ${GROUPID} mygroup
+RUN useradd --no-log-init -u ${USERID} -g ${GROUPID} -s /bin/bash -md /home/${USERNAME} ${USERNAME}
+RUN usermod -a -G ${GROUPID} ${USERNAME}
+
+USER ${USERNAME}
+WORKDIR /home/${USERNAME}
