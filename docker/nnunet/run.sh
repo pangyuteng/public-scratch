@@ -8,9 +8,19 @@ export nnUNet_results="/radraid/pteng/tmp/nnUNet_results"
 
 #export TORCH_LOGS="+dynamo"
 #export TORCHDYNAMO_VERBOSE=1
-#export TRITON_HOME=/tmp
-export TRITON_CACHE_DIR=/tmp
-# python -c "import torch;print(torch.__version__)"
-# nnUNetv2_plan_and_preprocess -d 001 --verify_dataset_integrity
+# export TORCH_HOME=/radraid/pteng/tmp/.torch
+# export XDG_CACHE_HOME=/radraid/pteng/tmp/.xdgcache
+# export TRITON_HOME=/radraid/pteng/tmp/.tritonhome
+# export TRITON_CACHE_DIR=/radraid/pteng/tmp/.triton
+# export TORCHINDUCTOR_CACHE_DIR=/radraid/pteng/tmp/.torchinductor
+
+# export TORCH_HOME=/tmp/.torch
+# export XDG_CACHE_HOME=/tmp/.xdgcache
+# export TRITON_HOME=/tmp/.tritonhome
+# export TRITON_CACHE_DIR=/tmp/.triton
+# export TORCHINDUCTOR_CACHE_DIR=/tmp/.torchinductor
+
+python -c "import torch;print(torch.__version__)"
+nnUNetv2_plan_and_preprocess -d 001 --verify_dataset_integrity
 
 nnUNetv2_train 001 2d 0
