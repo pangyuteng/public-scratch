@@ -1,0 +1,23 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install \
+        autotools-dev \
+        build-essential \
+        ca-certificates \
+        vim curl wget \        
+        cmake g++ dcmtk -yq
+
+WORKDIR /opt/sources
+RUN wget --quiet https://github.com/malaterre/GDCM/archive/v3.0.4.tar.gz -O gdcm.tar.gz && \
+    tar -zxvf gdcm.tar.gz
+
+RUN mkdir -p /opt/sources/GDCM-3.0.4/build
+WORKDIR /opt/sources/GDCM-3.0.4/build
+RUN cmake .. \
+    -DCMAKE_INSTALL_RPATH=/usr/local/lib \
+    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    -DGDCM_BUILD_APPLICATIONS=1 \
+    -DGDCM_BUILD_SHARED_LIBS=1 \
+    && make -j"$(nproc)" && make -j"$(nproc)" install
+
+ENV PATH=/usr/local/bin:${PATH}
