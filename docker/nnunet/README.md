@@ -7,7 +7,7 @@ A: set below set of environment variables:
 
 
 ```
-export  =/tmp/.torch
+export TORCH_HOME=/tmp/.torch
 export XDG_CACHE_HOME=/tmp/.xdgcache
 export TORCH_COMPILE_DEBUG_DIR=/tmp/.torchdebug
 export TORCHINDUCTOR_CACHE_DIR=/tmp/.torchinductor
