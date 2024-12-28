@@ -1,0 +1,3 @@
+numba==0.51.2
+py-vollib==1.0.1
+py-vollib-vectorized==0.1.1

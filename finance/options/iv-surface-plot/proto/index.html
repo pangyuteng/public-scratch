@@ -1,0 +1,167 @@
+<!--
+https://plotly.com/javascript/3d-surface-plots/
+-->
+<html lang="en" data-bs-theme="dark">
+<head>
+	<!-- Load plotly.js into the DOM -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src='https://cdn.plot.ly/plotly-2.35.2.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+    <style>
+    </style>
+    <script>
+    d3.csv('iv1.csv', function(err, rows){
+        function unpack(rows, key) {
+        return rows.map(function(row) { return row[key]; });
+        }
+
+        var z_data1=[ ]
+        for(i=0;i<rows.length;i++)
+        {
+        z_data1.push(unpack(rows,i));
+        }
+
+        var data1 = [{
+                z: z_data1,
+                type: 'surface'
+                }];
+
+        var layout1 = {
+        title: {
+            text: 'IV1'
+        },
+        autosize: false,
+        width: 400,
+        height: 400,
+        margin: {
+            l: 50,
+            r: 50,
+            b: 50,
+            t: 50,
+        },
+        scene:{
+            camera: {
+                eye: {x: 0, y: 0, z: 1},
+                up:  {x: 0,  y: 1, z: 0},
+                projection: {
+                    type: 'orthographic'
+                }
+            }
+        }
+        };
+        Plotly.newPlot('myDiv1', data1, layout1);
+        Plotly.newPlot('myDiv11', data1, layout1);
+    });
+    d3.csv('iv2.csv', function(err, rows){
+        function unpack(rows, key) {
+            return rows.map(function(row) { return row[key]; });
+        }
+
+        var z_data2=[ ]
+        for(i=0;i<rows.length;i++)
+        {
+        z_data2.push(unpack(rows,i));
+        }
+
+        var data2 = [{
+                z: z_data2,
+                type: 'surface'
+                }];
+
+        var layout2 = {
+        title: {
+            text: 'IV2'
+        },
+        autosize: false,
+        width: 400,
+        height: 400,
+        margin: {
+            l: 50,
+            r: 50,
+            b: 50,
+            t: 50,
+        },
+        scene:{
+            camera: {
+                eye: {x: 0, y: 0, z: 1},
+                up:  {x: 0,  y: 1, z: 0},
+                projection: {
+                    type: 'orthographic'
+                }
+            }
+        }
+        };
+        Plotly.newPlot('myDiv2', data2, layout2);
+        Plotly.newPlot('myDiv22', data2, layout2);
+    }); // perspective orthographic
+
+    d3.csv('iv3.csv', function(err, rows){
+        function unpack(rows, key) {
+        return rows.map(function(row) { return row[key]; });
+        }
+
+        var z_data3=[ ]
+        for(i=0;i<rows.length;i++)
+        {
+        z_data3.push(unpack(rows,i));
+        }
+
+        var data3 = [{
+                z: z_data3,
+                type: 'surface'
+                }];
+
+        var layout3 = {
+        title: {
+            text: 'IV3'
+        },
+        autosize: false,
+        width: 400,
+        height: 400,
+        margin: {
+            l: 50,
+            r: 50,
+            b: 50,
+            t: 50,
+        },
+        scene:{
+            camera: {
+                eye: {x: 0, y: 0, z: 1},
+                up:  {x: 0,  y: 1, z: 0},
+                projection: {
+                    type: 'orthographic'
+                }
+            }
+        }
+        };
+        Plotly.newPlot('myDiv3', data3, layout3);
+        Plotly.newPlot('myDiv33', data3, layout3);
+        });
+
+    </script>
+</head>
+
+<body>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm" id='myDiv1'>
+            </div>
+            <div class="col-sm" id='myDiv2'>
+            </div>
+            <div class="col-sm" id='myDiv3'>
+            </div>
+        </div>
+    <br>
+        <div class="row">
+            <div class="col-sm" id='myDiv11'>
+            </div>
+            <div class="col-sm" id='myDiv22'>
+            </div>
+            <div class="col-sm" id='myDiv33'>
+            </div>
+        </div>
+      </div>
+</body>
+</html>
