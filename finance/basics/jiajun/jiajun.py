@@ -32,7 +32,7 @@ df = df[ (df.time_obj >= datetime.time(14,30)) & (df.time_obj < datetime.time(20
 
 london_close_price_dict ={}
 for date_item in list(df.date_obj.unique()):
-    tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(14,27))&(df.time_obj<datetime.time(14,31))]
+    tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(16,27))&(df.time_obj<datetime.time(16,31))]
     if len(tmp_df) > 0:
         london_close_price_dict[date_item] = tmp_df.close.to_list()[-1]
     else:
@@ -43,7 +43,7 @@ def get_london_close(x):
 df['london_close']=df.date_obj.apply(lambda x: get_london_close(x))
 
 def get_norm_price(row):
-    return row.close/row.london_close
+    return 100*(row.close-row.london_close)/row.london_close
 
 df['norm_price'] = df.apply(lambda row: get_norm_price(row),axis=1)
 
@@ -64,10 +64,10 @@ ax.xaxis.set_major_formatter(xfmt)
 ax.tick_params(axis='x', labelrotation=45)
 
 london_close_datetime = datetime.datetime(2000,1,1,16,30,00)
-plt.axvline(london_close_datetime)
+plt.axvline(london_close_datetime,color='red',linestyle='--')
 
-plt.title("SPY price, (red line is london close 16:30UTC)")
-plt.ylabel("price / (price at 14:30 UTC)")
+plt.title("SPY price, (red dashed line is london close 16:30UTC)")
+plt.ylabel("prct change from price at 14:30 UTC")
 plt.xlabel("time utc")
 plt.grid(True)
 plt.tight_layout()
