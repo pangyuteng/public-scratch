@@ -32,7 +32,7 @@ df = df[ (df.time_obj >= datetime.time(14,30)) & (df.time_obj < datetime.time(20
 
 london_close_price_dict ={}
 for date_item in list(df.date_obj.unique()):
-    tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(16,18))&(df.time_obj<datetime.time(16,21))]
+    tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(14,27))&(df.time_obj<datetime.time(14,31))]
     if len(tmp_df) > 0:
         london_close_price_dict[date_item] = tmp_df.close.to_list()[-1]
     else:
@@ -47,19 +47,27 @@ def get_norm_price(row):
 
 df['norm_price'] = df.apply(lambda row: get_norm_price(row),axis=1)
 
-day_mapper = {0:'0 mon',1:'1 tue',2:'2 wed',3:'3 thu',4:'4 fri'}
+day_mapper = {0:'mon',1:'tue',2:'wed',3:'thu',4:'fri'}
 def get_day_of_week(x):
     return day_mapper[x.weekday()]
 
 df['weekday'] = df.start_time.apply(lambda x: get_day_of_week(x))
 
 fig, ax = plt.subplots(figsize=(10, 8))
-sns.lineplot(x="time_utc",y="norm_price",hue="weekday",data=df,ax=ax)
+sns.lineplot(
+    x="time_utc",y="norm_price",hue="weekday",
+    data=df,ax=ax,
+    hue_order=day_mapper.values()
+)
 xfmt = md.DateFormatter('%H:%M:%S')
 ax.xaxis.set_major_formatter(xfmt)
 ax.tick_params(axis='x', labelrotation=45)
-plt.title("Jiajun! Trade #LIZJNY, SPY price")
-plt.ylabel("price / (price at ~16:20 UTC)")
+
+london_close_datetime = datetime.datetime(2000,1,1,16,30,00)
+plt.axvline(london_close_datetime)
+
+plt.title("SPY price, (red line is london close 16:30UTC)")
+plt.ylabel("price / (price at 14:30 UTC)")
 plt.xlabel("time utc")
 plt.grid(True)
 plt.tight_layout()
