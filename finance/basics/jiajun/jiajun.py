@@ -25,17 +25,14 @@ df = df[['start_time','close']]
 
 df.start_time = df.start_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S+00'))
 df = df.sort_values(['start_time'])
-df['norm_time'] = df.start_time.apply(lambda x: x.replace(year=2000,month=1,day=1))
+df['time_utc'] = df.start_time.apply(lambda x: x.replace(year=2000,month=1,day=1))
 df['date_obj'] = df.start_time.apply(lambda x: x.date())
 df['time_obj'] = df.start_time.apply(lambda x: x.time())
-df['weekday'] = df.start_time.apply(lambda x: x.weekday())
-df = df[ (df.time_obj >= datetime.time(9,30)) & (df.time_obj < datetime.time(16,30)) ].reset_index()
-
+df = df[ (df.time_obj >= datetime.time(14,30)) & (df.time_obj < datetime.time(20,30)) ].reset_index()
 
 london_close_price_dict ={}
 for date_item in list(df.date_obj.unique()):
-    #tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(9,28))&(df.time_obj<datetime.time(9,31))]
-    tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(11,28))&(df.time_obj<datetime.time(11,31))]
+    tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(16,18))&(df.time_obj<datetime.time(16,21))]
     if len(tmp_df) > 0:
         london_close_price_dict[date_item] = tmp_df.close.to_list()[-1]
     else:
@@ -50,11 +47,20 @@ def get_norm_price(row):
 
 df['norm_price'] = df.apply(lambda row: get_norm_price(row),axis=1)
 
+day_mapper = {0:'0 mon',1:'1 tue',2:'2 wed',3:'3 thu',4:'4 fri'}
+def get_day_of_week(x):
+    return day_mapper[x.weekday()]
+
+df['weekday'] = df.start_time.apply(lambda x: get_day_of_week(x))
 
 fig, ax = plt.subplots(figsize=(10, 8))
-sns.lineplot(x="norm_time",y="norm_price",hue="weekday",data=df,ax=ax)
+sns.lineplot(x="time_utc",y="norm_price",hue="weekday",data=df,ax=ax)
 xfmt = md.DateFormatter('%H:%M:%S')
 ax.xaxis.set_major_formatter(xfmt)
 ax.tick_params(axis='x', labelrotation=45)
-plt.title("price normalize to price at london close")
+plt.title("Jiajun! Trade #LIZJNY, SPY price")
+plt.ylabel("price / (price at ~16:15 UTC)")
+plt.xlabel("time utc")
+plt.grid(True)
+plt.tight_layout()
 plt.savefig('intraday-spy.png')
