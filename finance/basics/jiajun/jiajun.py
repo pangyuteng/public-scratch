@@ -19,8 +19,10 @@ for d in sorted(list(set([x.date() for x in df.start_time.unique()]))):
     #print(time_series)
     #sys.exit(1)
     print(day_df.shape)
-    timeline = [x.replace(year=2000,month=1,day=1) for x in day_df.start_date]
-    plt.plot(timeline,day_df.close,alpha=1)
+    time_list = [x.replace(year=2000,month=1,day=1) for x in day_df.start_date]
+    price_list = day_df.close
+    price_list = price_list/price_list[120]
+    plt.plot(time_list,price_list,alpha=0.2)
 plt.grid(True)
 plt.savefig('ok.png')
 
