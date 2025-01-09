@@ -24,7 +24,7 @@ for d in sorted(list(set([x.date() for x in df.start_time.unique()]))):
     price_list = np.array(list(day_df.close))
     if len(price_list) > 300:
         price_list = price_list/price_list[120]
-        plt.plot(time_list,price_list,alpha=0.2)
+        plt.plot(range(len(time_list)),price_list,alpha=0.2)
 plt.grid(True)
 plt.savefig('ok.png')
 
