@@ -13,7 +13,7 @@ print(df.shape)
 df.start_time = df.start_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S+00'))
 df.end_time = df.end_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S+00'))
 df.start_date = df.start_time.apply(lambda x: x.date())
-df.thetime = df.start_time.apply(lambda x: x.time())
+df.the_time = df.start_time.apply(lambda x: x.time())
 for d in sorted(list(set([x.date() for x in df.start_time.unique()]))):
     day_df = df[df.start_date==d].reset_index()
     #print(time_series)
