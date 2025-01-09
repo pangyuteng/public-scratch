@@ -18,7 +18,9 @@ for d in sorted(list(set([x.date() for x in df.start_time.unique()]))):
     day_df = df[df.start_date==d].reset_index()
     #print(time_series)
     #sys.exit(1)
-    plt.plot(day_df.start_time,day_df.close,alpha=0.2)
+    print(day_df.shape)
+    timeline = [x.replace(year=2000,month=1,day=1) for x in day_df.start_date]
+    plt.plot(timeline,day_df.close,alpha=1)
 plt.grid(True)
 plt.savefig('ok.png')
 
