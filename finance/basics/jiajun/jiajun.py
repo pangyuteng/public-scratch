@@ -1,6 +1,7 @@
 
 import sys
 import datetime
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -19,10 +20,11 @@ for d in sorted(list(set([x.date() for x in df.start_time.unique()]))):
     #print(time_series)
     #sys.exit(1)
     print(day_df.shape)
-    time_list = [x.replace(year=2000,month=1,day=1) for x in day_df.start_date]
-    price_list = day_df.close
-    price_list = price_list/price_list[120]
-    plt.plot(time_list,price_list,alpha=0.2)
+    time_list = list([x.replace(year=2000,month=1,day=1) for x in day_df.start_date])
+    price_list = np.array(list(day_df.close))
+    if len(price_list) > 300:
+        price_list = price_list/price_list[120]
+        plt.plot(time_list,price_list,alpha=0.2)
 plt.grid(True)
 plt.savefig('ok.png')
 
