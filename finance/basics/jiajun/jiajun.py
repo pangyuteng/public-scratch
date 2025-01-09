@@ -32,7 +32,7 @@ df = df[ (df.time_obj >= datetime.time(14,30)) & (df.time_obj < datetime.time(20
 
 london_close_price_dict ={}
 for date_item in list(df.date_obj.unique()):
-    tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(16,27))&(df.time_obj<datetime.time(16,31))]
+    tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(16,13))&(df.time_obj<datetime.time(16,16))]
     if len(tmp_df) > 0:
         london_close_price_dict[date_item] = tmp_df.close.to_list()[-1]
     else:
@@ -63,10 +63,10 @@ xfmt = md.DateFormatter('%H:%M:%S')
 ax.xaxis.set_major_formatter(xfmt)
 ax.tick_params(axis='x', labelrotation=45)
 
-london_close_datetime = datetime.datetime(2000,1,1,16,30,00)
+london_close_datetime = datetime.datetime(2000,1,1,16,15,00)
 plt.axvline(london_close_datetime,color='red',linestyle='--')
 
-plt.title("SPY price, (red dashed line is london close 16:30UTC)")
+plt.title("SPY intraday price, red dashed line 15 min prior london close (16:15UTC)\ndata from 2023-09-07-to-2024-09-06")
 plt.ylabel("prct change from price at 14:30 UTC")
 plt.xlabel("time utc")
 plt.grid(True)
