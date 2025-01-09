@@ -34,6 +34,7 @@ df = df[ (df.time_obj >= datetime.time(9,30)) & (df.time_obj < datetime.time(16,
 
 london_close_price_dict ={}
 for date_item in list(df.date_obj.unique()):
+    #tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(9,28))&(df.time_obj<datetime.time(9,31))]
     tmp_df = df[(df.date_obj==date_item)&(df.time_obj>=datetime.time(11,28))&(df.time_obj<datetime.time(11,31))]
     if len(tmp_df) > 0:
         london_close_price_dict[date_item] = tmp_df.close.to_list()[-1]
