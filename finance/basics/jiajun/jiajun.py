@@ -15,11 +15,17 @@ print(df.shape)
 df.start_time = df.start_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S+00'))
 df.end_time = df.end_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S+00'))
 df = df.sort_values(['start_time'])
+
 df['mydate'] = df.start_time.apply(lambda x: x.date())
 df['mytime'] = df.start_time.apply(lambda x: x.time())
-df['weekday'] = df.start_time.apply(lambda x: x.get_weekday())
+df['seconds'] = df.start_time.apply(lambda x: (x.replace(year=2000,month=1,day=1)-datetime.datetime(2000,1,1,0,0,0)).total_seconds())
+df['weekday'] = df.start_time.apply(lambda x: x.weekday())
+df['close'] = df['close'].astype(float)
 
-sns.lineplot(x="mytime",y="close",hue="weekday",data=df)
+print(df['mytime'].unique())
+print(df['weekday'].unique())
+
+sns.lineplot(x="seconds",y="close",hue="weekday",data=df)
 plt.savefig('ok.png')
 
 """
