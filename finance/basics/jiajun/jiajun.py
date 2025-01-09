@@ -15,16 +15,25 @@ df.start_time = df.start_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%
 df.end_time = df.end_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S+00'))
 df['start_date'] = df.start_time.apply(lambda x: x.date())
 df['the_time'] = df.start_time.apply(lambda x: x.time())
+mylist = []
+
 for d in sorted(list(set([x.date() for x in df.start_time.unique()]))):
-    day_df = df[df.start_date==d].reset_index()
-    #print(time_series)
-    #sys.exit(1)
+    
+    day_df = df[df.start_date==d].reset_index()    
     print(day_df.shape)
+
     time_list = list([x.replace(year=2000,month=1,day=1) for x in day_df.start_date])
     price_list = np.array(list(day_df.close))
-    if len(price_list) > 300:
+
+    if len(price_list) > 600:
         price_list = price_list/price_list[120]
-        plt.plot(range(len(time_list)),price_list,alpha=0.2)
+        mylist.append(price_list[:600])
+        plt.plot(price_list,alpha=0.2)
+
+mylist = np.array(mylist)
+mean_price = np.median(mylist,axis=0)
+plt.plot(mean_price,linewidth=2)
+
 plt.grid(True)
 plt.savefig('ok.png')
 
