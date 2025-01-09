@@ -49,14 +49,11 @@ def get_norm_price(row):
 
 df['norm_price'] = df.apply(lambda row: get_norm_price(row),axis=1)
 
-df = df[-5000:]
-print(df.head())
-print(df.shape)
-
 
 fig, ax = plt.subplots(figsize=(10, 8))
 sns.lineplot(x="norm_time",y="norm_price",hue="weekday",data=df,ax=ax)
 xfmt = md.DateFormatter('%H:%M:%S')
 ax.xaxis.set_major_formatter(xfmt)
 ax.tick_params(axis='x', labelrotation=45)
+plt.title("price normalize to price at london close")
 plt.savefig('intraday-spy.png')
