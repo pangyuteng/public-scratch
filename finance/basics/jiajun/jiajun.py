@@ -12,15 +12,15 @@ print(df.shape)
 
 df.start_time = df.start_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S+00'))
 df.end_time = df.end_time.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S+00'))
-
+df.start_date = df.start_time.apply(lambda x: x.date())
+df.thetime = df.start_time.apply(lambda x: x.time())
 for d in sorted(list(set([x.date() for x in df.start_time.unique()]))):
-    date_filter = df.start_time.apply(lambda x: x.date())==d
-    day_df = df[date_filter].reset_index()
-    time_series = day_df.start_time.apply(lambda x: x.time())
+    day_df = df[df.start_date==d].reset_index()
     #print(time_series)
     #sys.exit(1)
-    plt.plot(day_df.start_time,day_df.close,alpha=0.2)
-plt.figsave('ok.png')
+    plt.plot(day_df.the_time,day_df.close,alpha=0.2)
+plt.grid(True)
+plt.savefig('ok.png')
 
 
 
