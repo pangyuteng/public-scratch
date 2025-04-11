@@ -16,3 +16,6 @@ RUN useradd -ms /bin/bash <USERNAME>
 
 bash build.sh
 bash start.sh
+
+
+## TODO:  how do you compile matlab cli ? to use without license???
