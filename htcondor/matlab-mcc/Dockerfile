@@ -1,4 +1,4 @@
-ARG ADDITIONAL_PRODUCTS="Computer_Vision_Toolbox Curve_Fitting_Toolbox GPU_Coder Image_Processing_Toolbox MATLAB_Coder MATLAB_Compiler MATLAB_Compiler_SDK "
+ARG ADDITIONAL_PRODUCTS="Computer_Vision_Toolbox Curve_Fitting_Toolbox GPU_Coder Image_Processing_Toolbox MATLAB_Coder MATLAB_Compiler MATLAB_Compiler_SDK Control_System_Toolbox Database_Toolbox System_Identification_Toolbox"
 ARG MATLAB_RELEASE=R2024a
 
 FROM mathworks/matlab:$MATLAB_RELEASE
@@ -58,9 +58,8 @@ RUN chmod 0440 /etc/sudoers.d/${USERNAME}
 USER ${USERNAME}
 WORKDIR /home/${USERNAME}
 COPY --chmod=777 pTVreg /home/${USERNAME}/
-COPY --chmod=777 foobar.m /home/${USERNAME}
+COPY --chmod=777 *.m /home/${USERNAME}
 RUN mkdir -p /home/${USERNAME}/Documents/MATLAB
 
-#ENTRYPOINT ["/bin/run.sh"]
 ENTRYPOINT [""]
 CMD [""]
