@@ -1,4 +1,5 @@
-addpath("/home/pteng/ptv");
+addpath(genpath("/home/pteng/mutils/My"));
+addpath(genpath("/home/pteng/ptv"));
 
 fixed_nii_file = '/workdir/chris_t1.nii.gz';
 moving_nii_file = '/workdir/chris_t2.nii.gz';
@@ -27,4 +28,5 @@ opts.check_gradients = 100*0;
 opts.pix_resolution = spc;
 
 [voldef, Tptv, Kptv] = ptv_register(volmov, volfix, opts);
+
 
