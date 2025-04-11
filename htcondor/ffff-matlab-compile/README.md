@@ -52,4 +52,6 @@ bash run_foobar.sh /opt/matlab/R2024a
 + exit container, rebuild container replace to have null entrypoint: `ENTRYPOINT [""]`
 
 docker run --init -it --rm -p 5901:5901 -p 8888:8888 --shm-size=512M \
-    -v $PWD/workdir:/workdir -w /home/pteng/workdir/MATLAB $USER:matlab bash run_foobar.sh /opt/matlab/R2024a
+    -v $PWD/workdir:/workdir -w /workdir \
+    $USER:matlab bash /workdir/MATLAB/run_foobar.sh /opt/matlab/R2024a
+    
