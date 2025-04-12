@@ -1,8 +1,18 @@
+
 docker build \
   --build-arg GROUPID=$(id -g) \
   --build-arg USERID=$(id -u) \
   --build-arg USERNAME=$USER \
-  -t $USER:matlab .
+  -f Dockerfile \
+  -t pangyuteng/matlab:ptvreg-base .
 
-docker tag $USER:matlab pangyuteng/matlab:ptvreg
-docker push pangyuteng/matlab:ptvreg
+docker push pangyuteng/matlab:ptvreg-base
+
+docker build \
+  --build-arg GROUPID=$(id -g) \
+  --build-arg USERID=$(id -u) \
+  --build-arg USERNAME=$USER \
+  -f Dockerfile.prod \
+  -t pangyuteng/matlab:ptvreg-prod .
+
+docker push pangyuteng/matlab:ptvreg-prod

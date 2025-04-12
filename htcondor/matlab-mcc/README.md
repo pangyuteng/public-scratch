@@ -100,3 +100,7 @@ bash run_hola_cli.sh /opt/matlab/R2024a \
   /opt/myapp/workdir/chris_t1.nii.gz \
   /opt/myapp/workdir/chris_t2.nii.gz \
   /opt/myapp/workdir/ok.nii.gz
+
+cd ~/Documents/MATLAB
+cp hola_cli /opt/myapp/bin
+cp run_hola_cli.sh /opt/myapp/bin
