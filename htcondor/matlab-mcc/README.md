@@ -85,8 +85,18 @@ bash run_foobar.sh /opt/matlab/R2024a 123 abc
 
 run('/opt/myapp/hola.m');
 
-mcc -v -R -nodisplay -R -singleCompThread -m /opt/myapp/hola.m
+https://www.mathworks.com/matlabcentral/answers/355248-how-to-add-different-folders-while-generating-standalone-exe-using-mcc-command
+
+mcc -v -R -nodisplay -R -singleCompThread -m /opt/myapp/hola_mcc.m -a /opt/myapp/pTVreg/*
+bash run_hola_mcc.sh /opt/matlab/R2024a
+
+mcc -v -R -nodisplay -R -singleCompThread -m /opt/myapp/hola_cli.m -a /opt/myapp/pTVreg/*
 
 docker exec -it ...
 cd ~/Documents/MATLAB
-bash run_hola.sh /opt/matlab/R2024a /workdir/chris_t1.nii.gz /workdir/chris_t2.nii.gz /workdir/ok.nii.gz
+bash run_hola_mcc.sh /opt/matlab/R2024a 
+
+bash run_hola_cli.sh /opt/matlab/R2024a \
+  /opt/myapp/workdir/chris_t1.nii.gz \
+  /opt/myapp/workdir/chris_t2.nii.gz \
+  /opt/myapp/workdir/ok.nii.gz
