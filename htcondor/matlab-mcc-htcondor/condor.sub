@@ -13,11 +13,19 @@ error = log/$(cluster).$(process).err
 log = log/$(cluster).$(process).log
 
 requirements = (Arch == "X86_64" && OpSys =="LINUX")
-#requirements = Machine == "XXXXXXX.ad.medctr.ucla.edu"
+#requirements = Machine == "xxxx.ad.medctr.ucla.edu"
 
 request_cpus = 4
 request_memory = 12GB
 request_disk = 1GB
 
-arguments = "chris_t1.nii.gz chris_t2.nii.gz output.nii.gz"
+arguments = "chris_t1.nii.gz chris_t2.nii.gz output1.nii.gz"
+queue 1
+arguments = "chris_t1.nii.gz chris_t2.nii.gz output2.nii.gz"
+queue 1
+arguments = "chris_t1.nii.gz chris_t2.nii.gz output3.nii.gz"
+queue 1
+arguments = "chris_t1.nii.gz chris_t2.nii.gz output4.nii.gz"
+queue 1
+arguments = "chris_t1.nii.gz chris_t2.nii.gz output5.nii.gz"
 queue 1
