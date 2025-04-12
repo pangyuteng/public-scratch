@@ -32,7 +32,10 @@ opts.pix_resolution = spc;
 % voldef: deformed image
 % Tptv: deformataion vector field DVF ?
 
-% niftiwrite(voldef,output_nii_file,fixed_info);
-niftiwrite(voldef,output_nii_file);
+
+fixed_info.Datatype = 'double';
+fixed_info.BitsPerPixel = 64;
+niftiwrite(voldef,output_nii_file,fixed_info);
+
 
 end

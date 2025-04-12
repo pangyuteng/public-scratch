@@ -87,7 +87,7 @@ bash run_hola_cli.sh /opt/matlab/R2024a \
 
 ```
 
-+ move executables to `bin` folder
++ in running container, move executables to code repo `bin` folder, ensure `hola_cli` is a git LFS (this should was already set via `.gitattributes` file)
 
 ```
 
@@ -97,6 +97,28 @@ cp run_hola_cli.sh /opt/myapp/bin
 
 ```
 
++ build "production container"
+
+```
+bash build_and_push.sh
+```
+
++ test out binary
+
+```
+
+cd workdir
+
+docker run --init -it --rm --shm-size=512M \
+  -v $PWD:/workdir -w /workdir \
+  pangyuteng/matlab:ptvreg-prod \
+  bash
+
+rm output.nii.gz
+bash /opt/myapp/bin/run_hola_cli.sh /opt/matlab/R2024a chris_t1.nii.gz chris_t2.nii.gz output.nii.gz
+
+
+```
 
 
 

@@ -29,4 +29,6 @@ opts.pix_resolution = spc;
 
 [voldef, Tptv, Kptv] = ptv_register(volmov, volfix, opts);
 
-niftiwrite(voldef,output_nii_file);
+fixed_info.Datatype = 'double';
+fixed_info.BitsPerPixel = 64;
+niftiwrite(voldef,output_nii_file,fixed_info);
