@@ -1,9 +1,9 @@
-addpath(genpath("/opt/pTVreg/mutils/My"));
-addpath(genpath("/opt/pTVreg/ptv"));
+addpath(genpath("/opt/myapp/pTVreg/mutils/My"));
+addpath(genpath("/opt/myapp/pTVreg/ptv"));
 
-fixed_nii_file = '/workdir/chris_t1.nii.gz';
-moving_nii_file = '/workdir/chris_t2.nii.gz';
-output_nii_file = '/workdir/output.nii.gz';
+fixed_nii_file = '/opt/myapp/workdir/chris_t1.nii.gz';
+moving_nii_file = '/opt/myapp/workdir/chris_t2.nii.gz';
+output_nii_file = '/opt/myapp/workdir/output.nii.gz';
 
 fixed_info = niftiinfo(fixed_nii_file);
 volfix = niftiread(fixed_info);

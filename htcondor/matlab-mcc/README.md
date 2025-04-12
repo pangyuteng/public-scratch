@@ -74,17 +74,16 @@ docker run --init -it --rm --shm-size=512M \
 
 bash /bin/run.sh
 
-run('/workdir/foo.m');
-
-mcc -v -R -nodisplay -R -singleCompThread -m /workdir/foobar.m
+run('/opt/myapp/foo.m');
+run('/opt/myapp/foobar.m');
+mcc -v -R -nodisplay -R -singleCompThread -m /opt/myapp/foobar.m
 
 docker exec -it ...
 cd ~/Documents/MATLAB
 bash run_foobar.sh /opt/matlab/R2024a 123 abc
 
-cp -R pTVreg workdir
 
-run('/workdir/hola.m');
+run('/opt/myapp/hola.m');
 
 mcc -v -R -nodisplay -R -singleCompThread -m /workdir/hola.m
 
