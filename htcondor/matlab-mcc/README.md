@@ -104,3 +104,12 @@ bash run_hola_cli.sh /opt/matlab/R2024a \
 cd ~/Documents/MATLAB
 cp hola_cli /opt/myapp/bin
 cp run_hola_cli.sh /opt/myapp/bin
+
+bash build_and_push.sh
+
+docker run -it --shm-size=512M -v $PWD/workdir:/workdir -w /workdir pangyuteng/matlab:ptvreg-prod bash
+
+bash /opt/myapp/bin/run_hola_cli.sh /opt/matlab/R2024a \
+  /workdir/chris_t1.nii.gz \
+  /workdir/chris_t2.nii.gz \
+  /workdir/ok.nii.gz
