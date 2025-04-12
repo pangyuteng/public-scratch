@@ -1,7 +1,10 @@
 
+function []=myfunc(arg1, arg2)
 
-A = [15 150];
+A = [arg1,arg2];
 S = 'Hello World.';
 
 disp(A)
 disp(S)
+
+end
