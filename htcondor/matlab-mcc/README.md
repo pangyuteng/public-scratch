@@ -56,7 +56,7 @@ bash run_foobar.sh /opt/matlab/R2024a
 docker run --init -it --rm -p 5901:5901 -p 8888:8888 --shm-size=512M \
     -v $PWD/workdir:/workdir -w /workdir \
     $USER:matlab bash /workdir/MATLAB/run_foobar.sh /opt/matlab/R2024a
-    
+
 
 
 + testing/development
@@ -69,6 +69,22 @@ wget https://github.com/neurolabusc/niivue-images/raw/refs/heads/main/chris_t2.n
 
 cp hola.m workdir
 
-in matlab prompt:
+docker run --init -it --rm --shm-size=512M \
+    -v $PWD/workdir:/workdir -w /workdir pangyuteng/matlab:ptvreg bash
 
-run('/workdir/hola.m');
+bash /bin/run.sh
+
+run('/workdir/foo.m');
+
+mcc -v -R -nodisplay -R -singleCompThread -m /workdir/foobar.m
+
+docker exec -it ...
+cd ~/Documents/MATLAB
+bash run_foobar.sh /opt/matlab/R2024a 123 abc
+
+cp -R pTVreg workdir
+mcc -v -R -nodisplay -R -singleCompThread -m /workdir/hola.m
+
+docker exec -it ...
+cd ~/Documents/MATLAB
+bash run_hola.sh /opt/matlab/R2024a /workdir/chris_t1.nii.gz /workdir/chris_t2.nii.gz /workdir/ok.nii.gz

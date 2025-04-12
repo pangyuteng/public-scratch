@@ -1,5 +1,11 @@
-addpath(genpath("/workdir/pTVreg/mutils/My"));
-addpath(genpath("/workdir/pTVreg/ptv"));
+addpath("/workdir/pTVreg/mutils/My/");
+addpath("/workdir/pTVreg/ptv");
+
+% function []=myfunc(arg1, arg2, arg3)
+
+% fixed_nii_file = arg1;
+% moving_nii_file = arg2;
+% output_nii_file = arg3;
 
 fixed_nii_file = '/workdir/chris_t1.nii.gz';
 moving_nii_file = '/workdir/chris_t2.nii.gz';
@@ -29,3 +35,5 @@ opts.pix_resolution = spc;
 
 [voldef, Tptv, Kptv] = ptv_register(volmov, volfix, opts);
 
+
+% end
