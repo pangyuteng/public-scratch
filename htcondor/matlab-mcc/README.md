@@ -85,7 +85,7 @@ bash run_foobar.sh /opt/matlab/R2024a 123 abc
 
 run('/opt/myapp/hola.m');
 
-mcc -v -R -nodisplay -R -singleCompThread -m /workdir/hola.m
+mcc -v -R -nodisplay -R -singleCompThread -m /opt/myapp/hola.m
 
 docker exec -it ...
 cd ~/Documents/MATLAB
