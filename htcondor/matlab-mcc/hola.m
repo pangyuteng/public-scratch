@@ -1,5 +1,5 @@
-addpath(genpath("/workdir/pTVreg/mutils/My"));
-addpath(genpath("/workdir/pTVreg/ptv"));
+addpath(genpath("/opt/pTVreg/mutils/My"));
+addpath(genpath("/opt/pTVreg/ptv"));
 
 fixed_nii_file = '/workdir/chris_t1.nii.gz';
 moving_nii_file = '/workdir/chris_t2.nii.gz';

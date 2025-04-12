@@ -1,5 +1,5 @@
-addpath("/workdir/pTVreg/mutils/My/");
-addpath("/workdir/pTVreg/ptv");
+addpath(genpath("/workdir/pTVreg/mutils/My"));
+addpath(genpath("/workdir/pTVreg/ptv"));
 
 % function []=myfunc(arg1, arg2, arg3)
 

@@ -57,8 +57,8 @@ RUN chmod 0440 /etc/sudoers.d/${USERNAME}
 
 USER ${USERNAME}
 WORKDIR /home/${USERNAME}
-COPY --chmod=777 pTVreg /home/${USERNAME}/
-COPY --chmod=777 *.m /home/${USERNAME}
+#COPY --chmod=777 pTVreg /opt/myapp/pTVreg
+#COPY --chmod=777 *.m /opt/myapp
 RUN mkdir -p /home/${USERNAME}/Documents/MATLAB
 
 ENTRYPOINT [""]

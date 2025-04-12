@@ -66,11 +66,11 @@ cd workdir
 wget https://github.com/neurolabusc/niivue-images/raw/refs/heads/main/chris_t1.nii.gz
 wget https://github.com/neurolabusc/niivue-images/raw/refs/heads/main/chris_t2.nii.gz
 
-
 cp hola.m workdir
 
 docker run --init -it --rm --shm-size=512M \
-    -v $PWD/workdir:/workdir -w /workdir pangyuteng/matlab:ptvreg bash
+  -v $PWD:/opt/myapp \
+  pangyuteng/matlab:ptvreg bash
 
 bash /bin/run.sh
 
@@ -83,6 +83,9 @@ cd ~/Documents/MATLAB
 bash run_foobar.sh /opt/matlab/R2024a 123 abc
 
 cp -R pTVreg workdir
+
+run('/workdir/hola.m');
+
 mcc -v -R -nodisplay -R -singleCompThread -m /workdir/hola.m
 
 docker exec -it ...
