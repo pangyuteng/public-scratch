@@ -32,6 +32,7 @@ opts.pix_resolution = spc;
 % voldef: deformed image
 % Tptv: deformataion vector field DVF ?
 
-niftiwrite(voldef,output_nii_file,info);
+% not tested !!!
+niftiwrite(voldef,output_nii_file,fixed_info);
 
 end
