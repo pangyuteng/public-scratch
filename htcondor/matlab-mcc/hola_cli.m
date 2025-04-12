@@ -23,7 +23,7 @@ opts.isoTV = 0.11;
 opts.csqrt = 5e-3;
 opts.spline_order = 1;
 opts.border_mask = 5;
-opts.max_iters =  80;
+opts.max_iters = 2;
 opts.check_gradients = 100*0;
 opts.pix_resolution = spc;
 
@@ -32,7 +32,7 @@ opts.pix_resolution = spc;
 % voldef: deformed image
 % Tptv: deformataion vector field DVF ?
 
-% not tested !!!
-niftiwrite(voldef,output_nii_file,fixed_info);
+% niftiwrite(voldef,output_nii_file,fixed_info);
+niftiwrite(voldef,output_nii_file);
 
 end
