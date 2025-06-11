@@ -1,0 +1,6 @@
+FROM pangyuteng/matlab:ptvreg-base
+
+WORKDIR /opt/myapp
+COPY --chmod=777 pTVreg /opt/myapp/pTVreg
+COPY --chmod=777 *.m /opt/myapp
+COPY --chmod=777 bin /opt/myapp/bin
