@@ -1,6 +1,7 @@
-yfinance
-seaborn
-statsmodels
-scikit-learn
-numba==0.51.2
-py-vollib==1.0.1
+yfinance>=0.2.65
+numba>=0.61.2
+py-vollib>=1.0.1
+seaborn>=0.13.2
+matplotlib>=3.10.5
+statsmodels>=0.14.5
+scikit-learn>=1.7.1
