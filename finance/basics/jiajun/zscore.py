@@ -91,7 +91,15 @@ def foobar(regime):
     plt.ylabel('spx prct_change')
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig(f"tmp/6-zscore-volume-with-price-change-{regime}.png")
+    plt.savefig(f"tmp/6-prior-day-zscore-volume-with-price-change-{regime}.png")
+    plt.close()
+
+    plt.scatter(df.vix_open,df.yesterday_volume_z_score,s=1,alpha=1,marker='.')
+    plt.xlabel('vix_open')
+    plt.ylabel("yesterdays volume_z_score (window=252days)")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(f"tmp/7-prior-day-zscore-volume-with-vix-open-{regime}.png")
     plt.close()
 
 def main():
