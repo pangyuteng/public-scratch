@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import datetime
 import numpy as np
 import pandas as pd
@@ -9,6 +10,10 @@ import seaborn as sns
 from low_vix_daily_low_vol import prepare,csv_file
 
 def foobar(regime):
+    json_file = 'static/expiration-dates.json'
+    with open(json_file,'r') as f:
+        expiration_list = json.loads(f.read())
+        expiration_list = [datetime.datetime.strptime(x,'%Y-%m-%d') for x in expiration_list]
 
     df = pd.read_csv(csv_file)
     df.tstamp = df.tstamp.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d'))
@@ -18,15 +23,19 @@ def foobar(regime):
         pass
     elif regime == 'le2008':
         df = df[df.tstamp.apply(lambda x:x.year <= 2008)]
+        expiration_list = [x for x in expiration_list if x.year <= 2008]
     elif regime == 'gt2008lt2020':
         df = df[df.tstamp.apply(lambda x: (x.year > 2008)&(x.year < 2020))]
+        expiration_list = [x for x in expiration_list if (x.year > 2008)&(x.year < 2020)]
     elif regime == 'ge2020':
         df = df[df.tstamp.apply(lambda x:x.year >= 2020)]
+        expiration_list = [x for x in expiration_list if x.year >= 2020]
     else:
         raise NotImplementedError()
 
     min_tstamp = df.tstamp.min().strftime('%Y-%m-%d')
     max_tstamp = df.tstamp.max().strftime('%Y-%m-%d')
+    plt.close()
 
     fig = plt.figure(figsize=(15,15))
     plt.subplot(511)
@@ -35,13 +44,17 @@ def foobar(regime):
     plt.grid(True)
     plt.subplot(512)
     plt.plot(df.tstamp,df.spx_volume)
-    plt.ylabel('spx_volume')
+    plt.ylabel('spx_volume')    
     plt.grid(True)
     plt.subplot(513)
     plt.plot(df.tstamp,df.volume_z_score)
     plt.axhline(0,color='red')
     plt.ylabel('volume_z_score')
     plt.grid(True)
+    
+    plt.scatter(expiration_list,[200]*len(expiration_list),color='blue')
+    plt.xlabel('(vix expirations in blue)')
+    
     plt.subplot(514)
     plt.plot(df.tstamp,df.vix_close)
     plt.ylabel('vix_close')
