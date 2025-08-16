@@ -1,11 +1,6 @@
-jupyterlab
 yfinance
-numba==0.51.2
-py-vollib==1.0.1
 seaborn
 statsmodels
 scikit-learn
-pyyaml
-tensorflow-addons
-tensorflow_datasets
-tensorflow_text==2.8.*
+numba==0.51.2
+py-vollib==1.0.1
