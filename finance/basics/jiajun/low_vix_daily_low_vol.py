@@ -45,7 +45,7 @@ def prepare():
     # https://en.wikipedia.org/wiki/Standard_score
     def z_score(w):
         return ( w.iloc[-1] - np.mean(w) ) / np.std(w)
-    df['iv_z_score'] =df.vix_open.rolling(252).apply(z_score)
+    df['vix_z_score'] =df.vix_open.rolling(252).apply(z_score)
     df['volume_z_score'] =df.spx_volume.rolling(252).apply(z_score)
     df.to_csv(csv_file,index=False)
 
@@ -103,7 +103,7 @@ def verify_low_vix_daily_low_vol(regime):
     plt.savefig(f"tmp/1-prct_change-vs-iv-{regime}.png")
     plt.close()
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10,10))
     plt.subplot(411)
     plt.plot(df.tstamp,df.spx_close)
     plt.ylabel("SPX")
@@ -152,7 +152,7 @@ def verify_low_vix_daily_low_vol_heatmap(regime):
 
     sns.histplot(
         df, x="vix_open", y="prct_change",
-        bins=[50,200], discrete=(False, False), log_scale=(False, False),
+        bins=[200,200], discrete=(False, False), log_scale=(False, False),
         binrange=[(0,50),(-3,3)],
         ax=ax,legend=False,cbar=True, cbar_kws=dict(shrink=.75),
     )

@@ -7,6 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 from low_vix_daily_low_vol import prepare,csv_file
 
@@ -40,8 +41,8 @@ def foobar(regime):
 
     fig = plt.figure(figsize=(15,15))
     plt.subplot(511)
-    plt.plot(df.tstamp,df.spx_close)
-    plt.ylabel('spx_close')
+    plt.plot(df.tstamp,df.spx_open)
+    plt.ylabel('spx_open')
     plt.grid(True)
 
     plt.subplot(512)
@@ -64,17 +65,17 @@ def foobar(regime):
 
     
     plt.subplot(514)
-    plt.plot(df.tstamp,df.vix_close)
-    plt.ylabel('vix_close')
+    plt.plot(df.tstamp,df.vix_open)
+    plt.ylabel('vix_open')
     plt.grid(True)
 
     plt.scatter(expiration_list,[20]*len(expiration_list),color='blue',alpha=0.5)
     plt.xlabel('(vix expirations in blue)')
 
     plt.subplot(515)
-    plt.plot(df.tstamp,df.iv_z_score)
+    plt.plot(df.tstamp,df.vix_z_score)
     plt.axhline(0,color='red')
-    plt.ylabel('iv_z_score')
+    plt.ylabel('vix_z_score')
     plt.grid(True)
 
     plt.scatter(expiration_list,[1]*len(expiration_list),color='blue')
@@ -84,8 +85,8 @@ def foobar(regime):
     plt.savefig(f"tmp/3-zscore-{regime}.png")
     plt.close()
 
-    plt.scatter(df.iv_z_score,df.volume_z_score,s=1,alpha=1,marker='.')
-    plt.xlabel('iv_z_score')
+    plt.scatter(df.vix_z_score,df.volume_z_score,s=1,alpha=1,marker='.')
+    plt.xlabel('vix_z_score')
     plt.ylabel('volume_z_score')
     plt.grid(True)
     plt.tight_layout()
@@ -100,9 +101,22 @@ def foobar(regime):
     plt.savefig(f"tmp/5-viz-vs-volume-zscore-{regime}.png")
     plt.close()
 
+    markers = {'.':'.'}
+    df['sz']=0.1
+    df['style']='.'
+    sns.scatterplot(df,x='vix_open',y='prct_change',hue='volume_z_score',
+        sizes='sz',style="style",markers=markers,
+        alpha=0.1,palette='RdYlGn',
+    )
+    plt.xlabel('vix_open')
+    plt.ylabel('volume_z_score')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(f"tmp/5.1-prct_change-vix_open-volume-zscore-{regime}.png")
+    plt.close()
+
 
     df['yesterday_volume_z_score'] = df.volume_z_score.shift()
-    df = df.dropna()
     plt.scatter(df.yesterday_volume_z_score,df.prct_change,s=1,alpha=1,marker='.')
     plt.xlabel("yesterdays volume_z_score (window=252days)")
     plt.ylabel('spx prct_change')
@@ -121,16 +135,27 @@ def foobar(regime):
 
     # https://www.statsmodels.org/stable/examples/notebooks/generated/mixed_lm_example.html
     # https://www.statsmodels.org/stable/examples/notebooks/generated/ols.html
+    # https://statistiknachhilfe.ch/en/2024/02/27/linear-mixed-models-vs-ols-modelle-ein-vergleich-und-leitfaden-zur-auswahl/
+    """
+    OLS models are best suited for exploratory analyses in data sets where all observations are assumed to be independent and identically distributed.
+    LMMs are the better choice when the data structure is complex, for example with repeated measures, nested data or when the independence of observations is violated.
+    ... They (LMMs) provide a nuanced analysis of the data that takes into account the inherent group structure and potential correlation within groups.
+    """
     df["abs_prct_change"] = df.prct_change.abs()
-    model = sm.OLS(df["abs_prct_change"],df[['yesterday_volume_z_score','vix_open']])
+    df = df.dropna()
+    model = sm.OLS(df["abs_prct_change"],df[['vix_open','yesterday_volume_z_score']])
     results = model.fit()
     print(results.summary())
-    
+
+    # md = smf.mixedlm("abs_prct_change ~ vix_open + yesterday_volume_z_score ", df, groups=df["Pig"])
+    # mdf = md.fit(method=["lbfgs"])
+    # print(mdf.summary())
 
 def main():
     if not os.path.exists(csv_file):
         prepare()
-    for regime in ['all','le2008','gt2008lt2020','ge2020']:
+    #for regime in ['all','le2008','gt2008lt2020','ge2020']:
+    for regime in ['all','ge2020']:
         print(f'-----------------------period:{regime}-------------------------')
         foobar(regime)
 

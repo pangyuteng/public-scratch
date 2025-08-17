@@ -138,8 +138,8 @@ def main(regime):
     print(df.shape)
     print(df[df.net_gex==1].shape)
     print(df[df.net_gex==-1].shape)
-    plt.scatter(df[df.net_gex==1].vix_open,df[df.net_gex==1].prct_change,s=0.1,alpha=0.5,color='green')
-    plt.scatter(df[df.net_gex==-1].vix_open,df[df.net_gex==-1].prct_change,s=0.1,alpha=0.5,color='red')
+    plt.scatter(df[df.net_gex==1].vix_open,df[df.net_gex==1].prct_change,s=0.1,alpha=1,color='green')
+    plt.scatter(df[df.net_gex==-1].vix_open,df[df.net_gex==-1].prct_change,s=0.1,alpha=1,color='red')
     plt.xlabel('vix_open')
     plt.ylabel('prct_change')
     plt.grid(True)
@@ -151,12 +151,9 @@ def main(regime):
 
     df['yesterday_net_gex'] = df.net_gex.shift()
     df = df.dropna()
-    markers = {'.':'.'}
-    df['sz']=0.1
-    df['style']='.'    
     plt.scatter(df.vix_open,df.prct_change,s=1,alpha=0.1,marker='.',color='black')
-    plt.scatter(df[df.yesterday_net_gex=="+"].vix_open,df[df.yesterday_net_gex=="+"].prct_change,s=0.1,alpha=0.5,color='green')
-    plt.scatter(df[df.yesterday_net_gex=="-"].vix_open,df[df.yesterday_net_gex=="-"].prct_change,s=0.1,alpha=0.5,color='red')
+    plt.scatter(df[df.yesterday_net_gex==1].vix_open,df[df.yesterday_net_gex==1].prct_change,s=0.1,alpha=1,color='green')
+    plt.scatter(df[df.yesterday_net_gex==-1].vix_open,df[df.yesterday_net_gex==-1].prct_change,s=0.1,alpha=1,color='red')
 
     plt.xlabel("vix_open")
     plt.ylabel('spx prct_change')
@@ -164,22 +161,6 @@ def main(regime):
     plt.tight_layout()
     plt.savefig(f"tmp/11-prior-day-guess-gex-{regime}.png")
     plt.close()
-
-    todos = """
-    
-    can we classify daily data to below using only OHLC SPX and VIX?
-
-    + up only days
-
-    + up and down super volatile via vix ohlc
-
-    + down only days 
-
-    + other days
-
-    """
-
-    warnings.warn(f"TODOS:{todos}")
 
     # https://www.statsmodels.org/stable/examples/notebooks/generated/mixed_lm_example.html
     # https://www.statsmodels.org/stable/examples/notebooks/generated/ols.html
@@ -194,8 +175,25 @@ def main(regime):
     print(results.summary())
 
 
+todos = """
+
+can we classify daily data to below using only OHLC SPX and VIX?
+
++ up only days
+
++ up and down super volatile via vix ohlc
+
++ down only days 
+
++ other days
+
+"""
+
+warnings.warn(f"TODOS:{todos}")
+
 if __name__ == "__main__":
     
-    for regime in ['all','le2008','gt2008lt2020','ge2020']:
-        print(f'-----------------------period:{regime}-------------------------')
-        main(regime)
+    # for regime in ['all','le2008','gt2008lt2020','ge2020']:
+    regime = 'ge2020'
+    print(f'-----------------------period:{regime}-------------------------')
+    main(regime)
