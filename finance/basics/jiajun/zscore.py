@@ -101,21 +101,6 @@ def foobar(regime):
     plt.savefig(f"tmp/5-viz-vs-volume-zscore-{regime}.png")
     plt.close()
 
-    markers = {'.':'.'}
-    df['sz']=0.1
-    df['style']='.'
-    sns.scatterplot(df,x='vix_open',y='prct_change',hue='volume_z_score',
-        sizes='sz',style="style",markers=markers,
-        alpha=0.7,palette='RdYlGn',
-    )
-    plt.xlabel('vix_open')
-    plt.ylabel('volume_z_score')
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig(f"tmp/5.1-prct_change-vix_open-volume-zscore-{regime}.png")
-    plt.close()
-
-
     df['yesterday_volume_z_score'] = df.volume_z_score.shift()
     plt.scatter(df.yesterday_volume_z_score,df.prct_change,s=1,alpha=1,marker='.')
     plt.xlabel("yesterdays volume_z_score (window=252days)")
@@ -132,6 +117,23 @@ def foobar(regime):
     plt.tight_layout()
     plt.savefig(f"tmp/7-prior-day-zscore-volume-with-vix-open-{regime}.png")
     plt.close()
+
+
+    markers = {'.':'.'}
+    df['sz']=0.1
+    df['style']='.'
+    sns.scatterplot(df,x='vix_open',y='prct_change',hue='yesterday_volume_z_score',
+        sizes='sz',style="style",markers=markers,
+        alpha=0.7,palette='RdYlGn',
+    )
+    plt.xlabel('vix_open')
+    plt.ylabel('prct_change')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(f"tmp/7.1-prct_change-vix_open-yesterday-volume-zscore-{regime}.png")
+    plt.close()
+
+
 
     # https://www.statsmodels.org/stable/examples/notebooks/generated/mixed_lm_example.html
     # https://www.statsmodels.org/stable/examples/notebooks/generated/ols.html
