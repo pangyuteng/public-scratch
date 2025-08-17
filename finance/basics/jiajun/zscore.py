@@ -122,10 +122,11 @@ def foobar(regime):
     markers = {'.':'.'}
     df['sz']=0.1
     df['style']='.'
-    sns.scatterplot(df,x='vix_open',y='prct_change',hue='yesterday_volume_z_score',
+    ax = sns.scatterplot(df,x='vix_open',y='prct_change',hue='yesterday_volume_z_score',hue_norm=(-1.5,1.5),
         sizes='sz',style="style",markers=markers,
-        alpha=0.7,palette='RdYlGn',
+        alpha=0.5,palette='RdYlGn',edgecolors=None,
     )
+    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     plt.xlabel('vix_open')
     plt.ylabel('prct_change')
     plt.grid(True)
