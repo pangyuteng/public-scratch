@@ -44,7 +44,7 @@ def prepare():
 
     # https://en.wikipedia.org/wiki/Standard_score
     def z_score(w):
-        return 100* ( w.iloc[-1] - np.mean(w) ) / np.std(w)
+        return ( w.iloc[-1] - np.mean(w) ) / np.std(w)
     df['iv_z_score'] =df.vix_open.rolling(252).apply(z_score)
     df['volume_z_score'] =df.spx_volume.rolling(252).apply(z_score)
     df.to_csv(csv_file,index=False)

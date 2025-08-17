@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statsmodels.api as sm
 
 from low_vix_daily_low_vol import prepare,csv_file
 
@@ -42,28 +43,42 @@ def foobar(regime):
     plt.plot(df.tstamp,df.spx_close)
     plt.ylabel('spx_close')
     plt.grid(True)
+
     plt.subplot(512)
     plt.plot(df.tstamp,df.spx_volume)
-    plt.ylabel('spx_volume')    
+    plt.ylabel('spx_volume')
     plt.grid(True)
+
+    plt.scatter(expiration_list,[0.5*1e10]*len(expiration_list),color='blue',alpha=0.5)
+    plt.xlabel('(vix expirations in blue)')
+
+    
     plt.subplot(513)
     plt.plot(df.tstamp,df.volume_z_score)
     plt.axhline(0,color='red')
     plt.ylabel('volume_z_score')
     plt.grid(True)
-    
-    plt.scatter(expiration_list,[200]*len(expiration_list),color='blue')
+
+    plt.scatter(expiration_list,[1]*len(expiration_list),color='blue')
     plt.xlabel('(vix expirations in blue)')
+
     
     plt.subplot(514)
     plt.plot(df.tstamp,df.vix_close)
     plt.ylabel('vix_close')
     plt.grid(True)
+
+    plt.scatter(expiration_list,[20]*len(expiration_list),color='blue',alpha=0.5)
+    plt.xlabel('(vix expirations in blue)')
+
     plt.subplot(515)
     plt.plot(df.tstamp,df.iv_z_score)
     plt.axhline(0,color='red')
     plt.ylabel('iv_z_score')
     plt.grid(True)
+
+    plt.scatter(expiration_list,[1]*len(expiration_list),color='blue')
+    plt.xlabel('(vix expirations in blue)')
 
     plt.tight_layout()
     plt.savefig(f"tmp/3-zscore-{regime}.png")
@@ -85,7 +100,9 @@ def foobar(regime):
     plt.savefig(f"tmp/5-viz-vs-volume-zscore-{regime}.png")
     plt.close()
 
+
     df['yesterday_volume_z_score'] = df.volume_z_score.shift()
+    df = df.dropna()
     plt.scatter(df.yesterday_volume_z_score,df.prct_change,s=1,alpha=1,marker='.')
     plt.xlabel("yesterdays volume_z_score (window=252days)")
     plt.ylabel('spx prct_change')
@@ -102,12 +119,20 @@ def foobar(regime):
     plt.savefig(f"tmp/7-prior-day-zscore-volume-with-vix-open-{regime}.png")
     plt.close()
 
+    # https://www.statsmodels.org/stable/examples/notebooks/generated/mixed_lm_example.html
+    # https://www.statsmodels.org/stable/examples/notebooks/generated/ols.html
+    df["abs_prct_change"] = df.prct_change.abs()
+    model = sm.OLS(df["abs_prct_change"],df[['yesterday_volume_z_score','vix_open']])
+    results = model.fit()
+    print(results.summary())
+    
+
 def main():
     if not os.path.exists(csv_file):
         prepare()
     for regime in ['all','le2008','gt2008lt2020','ge2020']:
+        print(f'-----------------------period:{regime}-------------------------')
         foobar(regime)
-
 
 if __name__ == "__main__":
     main()
