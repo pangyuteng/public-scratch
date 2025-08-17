@@ -124,12 +124,12 @@ def main(regime):
             if row.spx_open==row.spx_low:
                 rowclass = 1
             if row.spx_close==row.spx_high:
-                rowclass = 1
+                rowclass = 2
         else:
             if row.spx_open==row.spx_high:
                 rowclass = -1
             if row.spx_close==row.spx_low:
-                rowclass = -1
+                rowclass = -2
         return rowclass
 
     df['net_gex'] = df.apply(guess_net_gamma_exposure,axis=1)
@@ -139,7 +139,9 @@ def main(regime):
     print(df[df.net_gex==1].shape)
     print(df[df.net_gex==-1].shape)
     plt.scatter(df[df.net_gex==1].vix_open,df[df.net_gex==1].prct_change,s=0.1,alpha=1,color='green')
+    plt.scatter(df[df.net_gex==2].vix_open,df[df.net_gex==2].prct_change,s=0.1,alpha=1,color='blue')
     plt.scatter(df[df.net_gex==-1].vix_open,df[df.net_gex==-1].prct_change,s=0.1,alpha=1,color='red')
+    plt.scatter(df[df.net_gex==-2].vix_open,df[df.net_gex==-2].prct_change,s=0.1,alpha=1,color='purple')
     plt.xlabel('vix_open')
     plt.ylabel('prct_change')
     plt.grid(True)
@@ -193,7 +195,7 @@ warnings.warn(f"TODOS:{todos}")
 
 if __name__ == "__main__":
     
-    # for regime in ['all','le2008','gt2008lt2020','ge2020']:
-    regime = 'ge2020'
-    print(f'-----------------------period:{regime}-------------------------')
-    main(regime)
+    #for regime in ['all','le2008','gt2008lt2020','ge2020']:
+    for regime in ['all','ge2020']:
+        print(f'-----------------------period:{regime}-------------------------')
+        main(regime)
