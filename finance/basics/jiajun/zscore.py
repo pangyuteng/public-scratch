@@ -106,7 +106,7 @@ def foobar(regime):
     df['style']='.'
     sns.scatterplot(df,x='vix_open',y='prct_change',hue='volume_z_score',
         sizes='sz',style="style",markers=markers,
-        alpha=0.1,palette='RdYlGn',
+        alpha=0.7,palette='RdYlGn',
     )
     plt.xlabel('vix_open')
     plt.ylabel('volume_z_score')
