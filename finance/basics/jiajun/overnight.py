@@ -8,6 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.api as sm
+from scipy import stats
 
 from low_vix_daily_low_vol import prepare,csv_file
 
@@ -19,7 +20,9 @@ def main():
     spx_mylist = []
     #for regime in ['all','le2008','gt2008lt2020','ge2020']:
     for regime in ['all','ge2020']:
-
+        print(" ")
+        print(f"----------{regime}------------------")
+        print(" ")
         df = pd.read_csv(csv_file)
         df.tstamp = df.tstamp.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d'))
 
@@ -54,6 +57,12 @@ def main():
         df2['prct_change'] = df.vix_close_to_vix_open_prct_change
         df2['class'] = "today_vix_close_to_today_vix_open"
 
+        print("yesterday_vix_close_to_vix_open vs today_vix_close_to_today_vix_open")
+        print('yesterday_vix_close_to_vix_open_prct_change mean sd',df.yesterday_vix_close_to_vix_open_prct_change.mean(),df.yesterday_vix_close_to_vix_open_prct_change.std())
+        print('today_vix_close_to_today_vix_open mean sd',df.vix_close_to_vix_open_prct_change.mean(),df.vix_close_to_vix_open_prct_change.std())
+        result = stats.ttest_rel(df.yesterday_vix_close_to_vix_open_prct_change, df.vix_close_to_vix_open_prct_change)
+        print(result)
+
         row_df = pd.concat([df1,df2])
         row_df['regime'] = regime
         vix_mylist.append(row_df)
@@ -66,11 +75,18 @@ def main():
         df2['prct_change'] = df.spx_close_to_spx_open_prct_change
         df2['class'] = "spx_close_to_spx_open"
 
+        print("---")
+        print("yesterday_spx_close_to_spx_open_prct_change vs spx_close_to_spx_open_prct_change")
+        print('yesterday_spx_close_to_spx_open_prct_change mean sd',df.yesterday_spx_close_to_spx_open_prct_change.mean(),df.yesterday_spx_close_to_spx_open_prct_change.std())
+        print('spx_close_to_spx_open_prct_change mean sd',df.spx_close_to_spx_open_prct_change.mean(),df.spx_close_to_spx_open_prct_change.std())
+        result = stats.ttest_rel(df.yesterday_spx_close_to_spx_open_prct_change, df.spx_close_to_spx_open_prct_change)
+        print(result)
+
         row_df = pd.concat([df1,df2])
         row_df['regime'] = regime
         spx_mylist.append(row_df)
 
-
+        
     vix_mdf = pd.concat(vix_mylist)
     spx_mdf = pd.concat(spx_mylist)
     
