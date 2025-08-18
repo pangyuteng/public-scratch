@@ -118,7 +118,7 @@ def main(regime):
     # openislow and prct_change > 0 : positive gamma
 
 
-    def guess_net_gamma_exposure(row):
+    def get_ohlc_market_strength(row):
         rowclass = 0
         if row.prct_change > 0:
             if row.spx_open==row.spx_low:
@@ -132,16 +132,16 @@ def main(regime):
                 rowclass = -2
         return rowclass
 
-    df['net_gex'] = df.apply(guess_net_gamma_exposure,axis=1)
+    df['ohlc_market_strength'] = df.apply(get_ohlc_market_strength,axis=1)
 
     plt.scatter(df.vix_open,df.prct_change,s=1,alpha=0.1,marker='.',color='black')
     print(df.shape)
-    print(df[df.net_gex==1].shape)
-    print(df[df.net_gex==-1].shape)
-    plt.scatter(df[df.net_gex==1].vix_open,df[df.net_gex==1].prct_change,s=0.1,alpha=1,color='green')
-    plt.scatter(df[df.net_gex==2].vix_open,df[df.net_gex==2].prct_change,s=0.1,alpha=1,color='blue')
-    plt.scatter(df[df.net_gex==-1].vix_open,df[df.net_gex==-1].prct_change,s=0.1,alpha=1,color='red')
-    plt.scatter(df[df.net_gex==-2].vix_open,df[df.net_gex==-2].prct_change,s=0.1,alpha=1,color='purple')
+    print(df[df.ohlc_market_strength==1].shape)
+    print(df[df.ohlc_market_strength==-1].shape)
+    plt.scatter(df[df.ohlc_market_strength==1].vix_open,df[df.ohlc_market_strength==1].prct_change,s=0.1,alpha=1,color='green')
+    plt.scatter(df[df.ohlc_market_strength==2].vix_open,df[df.ohlc_market_strength==2].prct_change,s=0.1,alpha=1,color='blue')
+    plt.scatter(df[df.ohlc_market_strength==-1].vix_open,df[df.ohlc_market_strength==-1].prct_change,s=0.1,alpha=1,color='red')
+    plt.scatter(df[df.ohlc_market_strength==-2].vix_open,df[df.ohlc_market_strength==-2].prct_change,s=0.1,alpha=1,color='purple')
     plt.xlabel('vix_open')
     plt.ylabel('prct_change')
     plt.grid(True)
@@ -150,29 +150,30 @@ def main(regime):
     plt.close()
 
 
-
-    df['yesterday_net_gex'] = df.net_gex.shift()
+    df['yesterday_ohlc_market_strength'] = df.ohlc_market_strength.shift()
     df = df.dropna()
     plt.scatter(df.vix_open,df.prct_change,s=1,alpha=0.1,marker='.',color='black')
-    plt.scatter(df[df.yesterday_net_gex==1].vix_open,df[df.yesterday_net_gex==1].prct_change,s=0.1,alpha=1,color='green')
-    plt.scatter(df[df.yesterday_net_gex==-1].vix_open,df[df.yesterday_net_gex==-1].prct_change,s=0.1,alpha=1,color='red')
+    plt.scatter(df[df.yesterday_ohlc_market_strength==1].vix_open,df[df.yesterday_ohlc_market_strength==1].prct_change,s=0.1,alpha=1,color='green')
+    plt.scatter(df[df.yesterday_ohlc_market_strength==-1].vix_open,df[df.yesterday_ohlc_market_strength==-1].prct_change,s=0.1,alpha=1,color='red')
 
     plt.xlabel("vix_open")
     plt.ylabel('spx prct_change')
+    plt.title("color is yesterday_ohlc_market_strength \nwhen green if (open=low or close=high)\nred if (open==high or close==low) ")
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(f"tmp/11-prior-day-guess-gex-{regime}.png")
     plt.close()
 
+
     # https://www.statsmodels.org/stable/examples/notebooks/generated/mixed_lm_example.html
     # https://www.statsmodels.org/stable/examples/notebooks/generated/ols.html
 
-    model = sm.OLS(df["prct_change"],df[['yesterday_net_gex']])
+    model = sm.OLS(df["prct_change"],df[['yesterday_ohlc_market_strength']])
     results = model.fit()
     print(results.summary())
 
     df["abs_prct_change"] = df.prct_change.abs()
-    model = sm.OLS(df["abs_prct_change"],df[['yesterday_net_gex']])
+    model = sm.OLS(df["abs_prct_change"],df[['yesterday_ohlc_market_strength']])
     results = model.fit()
     print(results.summary())
 
