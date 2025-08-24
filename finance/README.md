@@ -1,12 +1,16 @@
 ## setup environment with docker, and run notebook
 
 ```
-docker build -t tasty .
-docker run -it -v ${PWD}:/opt -w /opt -p 8889:8888 tasty bash -c "jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root"
+
+docker run -it --env TASTYTRADE_XXX --env TASTYTRADE_XXXX \
+-v ${PWD}:/opt -w /opt -p 8888:8888 pangyuteng/tasty bash 
 ```
+
 gpu
 ```
-docker run -it --gpus device=0 -v ${PWD}:/opt -w /opt -p 8889:8888 tasty bash -c "jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root"
+
+ --gpus device=0 
+
 ```
 ### convenience jupyter lab up with docker-compose
 
