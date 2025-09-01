@@ -9,3 +9,4 @@ financepy>=0.360
 pandarallel>=1.6.5
 tastytrade>=10.2.3
 notebook>=7.4.5
+tqdm>=4.67.1
