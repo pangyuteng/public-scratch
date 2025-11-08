@@ -1,0 +1,6 @@
+pandas
+matplotlib
+seaborn
+py_vollib_vectorized
+financepy
+schwab_py
