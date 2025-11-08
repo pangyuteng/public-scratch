@@ -22,10 +22,6 @@ else:
         token_path=os.environ['TOKENPATH']
     )
 
-account_id = int(os.environ['ACCOUNTID'])
-print(account_id,type(account_id))
-print(client.get_user_preferences())
-
 stream_client = StreamClient(client, account_id=account_id)
 
 async def read_stream():
