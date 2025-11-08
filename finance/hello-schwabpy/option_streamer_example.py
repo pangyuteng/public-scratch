@@ -42,4 +42,5 @@ async def read_stream():
     while True:
         await stream_client.handle_message()
 
-asyncio.run(read_stream())
+if __name__ == "__main__":
+    asyncio.run(read_stream())
