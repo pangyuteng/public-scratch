@@ -24,7 +24,7 @@ merged_file = 'tmp/cached.csv'
 if not os.path.exists(merged_file):
     df = spx_df.merge(vix_df,how='left',on=['tstamp'])
     df = df.dropna()
-    df.tstamp = df.tstamp.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S'))
+    df.tstamp = df.tstamp.apply(lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S')+datetime.timedelta(hours=1))
     # aggregate by 15min
     df = df.groupby(pd.Grouper(key="tstamp", freq="15Min")).last().reset_index()
     df['spx_log_ret'] = np.log(df.spx_close/df.spx_close.shift())
@@ -81,7 +81,7 @@ else:
 sns.stripplot(df, x="timeofday", y="spx_log_ret", size=1, color=".3",alpha=0.5)
 sns.boxplot(
     df, x="timeofday", y="spx_log_ret",
-    width=.6, whis=2
+    width=.6, whis=1.5
 )
 plt.ylabel("15min log return")
 plt.xlabel("time of day")
@@ -93,10 +93,10 @@ if True:
     plt.subplot(312)
     sns.boxplot(
         df[df.spx_daily_prct_change>=0], x="timeofday", y="spx_log_ret",
-        width=.6, whis=2
+        width=.6, whis=1.5
     )
     plt.ylabel("15min log return")
-    plt.xlabel("time of day (spx_daily_prct_change >= 0)")
+    plt.xlabel("time of day ET (spx_daily_prct_change >= 0)")
     plt.xticks(rotation=45)
     plt.yticks(rotation=45)
     ax.xaxis.grid(True)
@@ -105,11 +105,11 @@ if True:
     plt.subplot(313)
     sns.boxplot(
         df[df.spx_daily_prct_change<0], x="timeofday", y="spx_log_ret",
-        width=.6, whis=2
+        width=.6, whis=1.5
     )
 
     plt.ylabel("15min log return")
-    plt.xlabel("time of day (spx_daily_prct_change < 0)")
+    plt.xlabel("time of day ET (spx_daily_prct_change < 0)")
 
     plt.xticks(rotation=45)
     plt.yticks(rotation=45)
@@ -129,7 +129,7 @@ hue_order = ['Monday','Tuesday','Wednesday','Thursday','Friday']
 
 sns.boxplot(
     df, x="timeofday", y="spx_log_ret",hue='dayofweek',hue_order=hue_order,
-    width=.6, whis=2
+    width=.6, whis=1.5
 )
 
 plt.ylabel("15min log return")
@@ -150,7 +150,7 @@ else:
     f, ax = plt.subplots(figsize=(10, 10))
 sns.boxplot(
     df, x="timeofday", y="spx_relative_to_high",
-    width=.6, whis=2
+    width=.6, whis=1.5
 )
 plt.ylabel("price relative to daily high")
 plt.xlabel("time of day")
@@ -162,7 +162,7 @@ if True:
     plt.subplot(312)
     sns.boxplot(
         df[df.daily_vix_open<20], x="timeofday", y="spx_relative_to_high",
-        width=.6, whis=2
+        width=.6, whis=1.5
     )
     plt.ylabel("price relative to daily high")
     plt.xlabel("time of day (VIX open < 20 )")
@@ -174,7 +174,7 @@ if True:
     plt.subplot(313)
     sns.boxplot(
         df[df.daily_vix_open>=20], x="timeofday", y="spx_relative_to_high",
-        width=.6, whis=2
+        width=.6, whis=1.5
     )
     plt.ylabel("price relative to daily high")
     plt.xlabel("time of day (VIX open >= 20)")
@@ -196,7 +196,7 @@ else:
 
 sns.boxplot(
     df, x="timeofday", y="spx_relative_to_low",
-    width=.6, whis=2
+    width=.6, whis=1.5
 )
 plt.ylabel("price relative to daily low")
 plt.xlabel("time of day")
@@ -208,7 +208,7 @@ if True:
     plt.subplot(312)
     sns.boxplot(
         df[df.daily_vix_open<20], x="timeofday", y="spx_relative_to_low",
-        width=.6, whis=2
+        width=.6, whis=1.5
     )
     plt.ylabel("price relative to daily low")
     plt.xlabel("time of day (VIX open < 20)")
@@ -220,7 +220,7 @@ if True:
     plt.subplot(313)
     sns.boxplot(
         df[df.daily_vix_open>=20], x="timeofday", y="spx_relative_to_low",
-        width=.6, whis=2
+        width=.6, whis=1.5
     )
     plt.ylabel("price relative to daily low")
     plt.xlabel("time of day (VIX open >= 20)")
@@ -240,7 +240,7 @@ hue_order = ['Monday','Tuesday','Wednesday','Thursday','Friday']
 f, ax = plt.subplots(figsize=(10, 10))
 sns.boxplot(
     df, x="timeofday", y="spx_relative_to_high",hue='dayofweek',hue_order=hue_order,
-    width=.6, whis=2
+    width=.6, whis=1.5
 )
 plt.ylabel("price relative to daily high")
 plt.xlabel("time of day")
@@ -256,7 +256,7 @@ plt.close()
 f, ax = plt.subplots(figsize=(10, 10))
 sns.boxplot(
     df, x="timeofday", y="spx_relative_to_low",hue='dayofweek',hue_order=hue_order,
-    width=.6, whis=2
+    width=.6, whis=1.5
 )
 plt.ylabel("price relative to daily low")
 plt.xlabel("time of day")
