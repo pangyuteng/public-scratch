@@ -29,13 +29,3 @@ assert resp.status_code == httpx.codes.OK
 history = resp.json()
 print(history)
 
-
-"""
-
-ssh -L 8182:127.0.0.1:8182 gtx
-
-docker run -it --env-file=.env -w $PWD -v /mnt:/mnt \
--p 8182:8182 schwabpy bash
-
-
-"""

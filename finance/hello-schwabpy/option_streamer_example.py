@@ -41,7 +41,7 @@ from_date = datetime.date(2025, 11, 13)
 to_date = datetime.date(2025, 11, 15)
 
 response = client.get_option_chain("$SPX",
-    strike_count=1000,
+    strike_count=200,
     include_underlying_quote='true',
     from_date=from_date,
     to_date=to_date)
@@ -66,6 +66,9 @@ for epiration,itemdict in output_dict["callExpDateMap"].items():
 
 print(symbol_list[-1])
 print(len(symbol_list))
+symbol_list = symbol_list[:100]
+print(len(symbol_list))
+# API only allows you to subscribe to 100 symbols. sux.
 
 account_id = int(os.environ['ACCOUNTID'])
 stream_client = StreamClient(client, account_id=account_id)
@@ -79,8 +82,11 @@ async def read_stream():
 
     # Always add handlers before subscribing because many streams start sending
     # data immediately after success, and messages with no handlers are dropped.
-    stream_client.add_nasdaq_book_handler(print_message)
+
+    stream_client.add_level_one_option_handler(print_message)
     await stream_client.level_one_option_subs(symbol_list)
+
+    stream_client.add_options_book_handler(print_message)
     await stream_client.options_book_subs(symbol_list)
 
     while True:

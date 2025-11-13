@@ -19,3 +19,19 @@ https://schwab-py.readthedocs.io/en/latest/getting-started.html
 
 
 ```
+
+
+
+```
+
+
+ssh -L 8182:127.0.0.1:8182 gtx
+
+docker run -it --env-file=.env -w $PWD \
+-v tmptoken:/tmptoken -v /mnt:/mnt \
+-p 8182:8182 schwabpy bash
+
+
+
+```
+
