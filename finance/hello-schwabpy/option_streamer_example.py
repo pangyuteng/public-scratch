@@ -3,8 +3,10 @@ from schwab.client import Client
 from schwab.streaming import StreamClient
 
 import os
+import sys
 import asyncio
 import json
+
 
 # # Assumes you've already created a token. See the authentication page for more
 # # information.
@@ -22,6 +24,50 @@ else:
         token_path=os.environ['TOKENPATH']
     )
 
+
+from schwab.orders.options import OptionSymbol
+import datetime
+
+ticker = 'TSLA'
+symbol1 = OptionSymbol(ticker, datetime.date(year=2025, month=11, day=21), 'P', '430').build()
+print(symbol1)
+ticker = 'SPXW'
+symbol2 = OptionSymbol(ticker, datetime.date(year=2025, month=11, day=21), 'P', '6850').build()
+print(symbol2)
+
+symbol_list = [symbol1,symbol2]
+
+from_date = datetime.date(2025, 11, 13)
+to_date = datetime.date(2025, 11, 15)
+
+response = client.get_option_chain("$SPX",
+    strike_count=1000,
+    include_underlying_quote='true',
+    from_date=from_date,
+    to_date=to_date)
+
+if response.status_code != 200:
+    print(response.status_code)
+    sys.exit(1)
+else:
+    output_dict = response.json()
+    with open('ok.json','w') as f:
+        f.write(json.dumps(output_dict))
+
+last_price = output_dict["underlying"]["last"]
+symbol_list = []
+for epiration,itemdict in output_dict["callExpDateMap"].items():
+    print(epiration)
+    for strike,itemlist in itemdict.items():
+        for item in itemlist:
+            if False:
+                print(item["symbol"],item["volatility"],item["gamma"],item["last"])
+            symbol_list.append(item["symbol"])
+
+print(symbol_list[-1])
+print(len(symbol_list))
+
+account_id = int(os.environ['ACCOUNTID'])
 stream_client = StreamClient(client, account_id=account_id)
 
 async def read_stream():
@@ -30,10 +76,12 @@ async def read_stream():
     def print_message(message):
       print(json.dumps(message, indent=4))
 
+
     # Always add handlers before subscribing because many streams start sending
     # data immediately after success, and messages with no handlers are dropped.
     stream_client.add_nasdaq_book_handler(print_message)
-    await stream_client.nasdaq_book_subs(['GOOG'])
+    await stream_client.level_one_option_subs(symbol_list)
+    await stream_client.options_book_subs(symbol_list)
 
     while True:
         await stream_client.handle_message()
