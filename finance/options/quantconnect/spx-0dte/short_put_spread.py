@@ -30,7 +30,6 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
 
     def option_filter(self, universe):
         return universe.expiration(0, 0).weeklys_only()
-        
 
     def _mark_market_open(self):
         self.spx_open = self._spx.price
