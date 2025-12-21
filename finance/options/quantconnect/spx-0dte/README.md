@@ -3,4 +3,6 @@
 
 <img width="967" height="904" alt="image" src="https://github.com/user-attachments/assets/4a0aea63-5494-49fb-8303-e8b88b5441a5" />
 
+[iron_condor.py](https://github.com/pangyuteng/public-scratch/blob/main/finance/options/quantconnect/spx-0dte/iron_condor.py)
 
+<img width="967" height="904" alt="image" src="https://github.com/user-attachments/assets/51c1ece9-b912-4777-840b-dbaaccd1bb0e" />
