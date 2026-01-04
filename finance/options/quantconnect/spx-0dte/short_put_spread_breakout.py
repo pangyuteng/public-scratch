@@ -1,5 +1,9 @@
 
+# open range breakout "ORB" references
+# https://optionalpha.com/blog/opening-range-breakout-0dte-options-trading-strategy-explained
+# https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4824172
 # https://www.reddit.com/r/algotrading/comments/1nc1p7q/full_deep_dive_into_profitable_0dte_strategy_for/
+
 
 from AlgorithmImports import *
 
