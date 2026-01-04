@@ -48,7 +48,7 @@ class GammaExposureAlgorithm(QCAlgorithm):
             oi = c.open_interest
             
             contract_gex = gamma * oi * 100 * (spot ** 2)
-            # flip for put, customer long put, market maker short put.
+            # naive-gex assumption. customer short call long put, market maker long call short put.
             adjusted_gex = contract_gex if c.right == OptionRight.CALL else -1*contract_gex
             
             if c.right == OptionRight.CALL:
