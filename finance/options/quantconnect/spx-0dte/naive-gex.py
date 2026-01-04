@@ -1,4 +1,5 @@
 # source:
+# https://perfiliev.com/blog/how-to-calculate-gamma-exposure-and-zero-gamma-level
 # https://www.reddit.com/r/algotrading/comments/1niqfdr/sharing_gamma_exposure_calculator_useful_for_0dte
 
 from AlgorithmImports import *
@@ -47,7 +48,8 @@ class GammaExposureAlgorithm(QCAlgorithm):
             oi = c.open_interest
             
             contract_gex = gamma * oi * 100 * (spot ** 2)
-            adjusted_gex = -contract_gex if c.right == OptionRight.CALL else contract_gex
+            # flip for put, customer long put, market maker short put.
+            adjusted_gex = contract_gex if c.right == OptionRight.CALL else -1*contract_gex
             
             if c.right == OptionRight.CALL:
                 gex_data[strike]['call_gex'] += adjusted_gex
