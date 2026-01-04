@@ -7,7 +7,10 @@ ignore FOMC, event days.
 
 compute correlation of major stocks to gauge sentiment
 
-thurs,friday ? do something different ?
+thurs,friday ? ignore, do something different ?
+
+op ex. every montly third wed,thu,fri
+https://www.optionseducation.org/referencelibrary/expiration-calendar
 
 ignore switch strategy (long or short) based on $insert-criteria
 
@@ -25,8 +28,6 @@ https://www.quantconnect.com/docs/v2/writing-algorithms/algorithm-framework/risk
 https://www.quantconnect.com/docs/v2/writing-algorithms/securities/asset-classes/index-options/requesting-data/universes
 https://www.quantconnect.com/docs/v2/writing-algorithms/datasets/algoseek/us-index-options
 
-# # if self.time.date().isoweekday() in [4,5]: # reduce size for Thur and Fri
-# 
 
 --
 
@@ -45,5 +46,14 @@ def option_filter(self, universe):
 
 chain = [c for c in chain if OptionSymbol.is_weekly(c)]
 if len(chain) == 0: return
+
+if self.time.date().isoweekday() in [4,5]: # reduce size for Thur and Fri
+
+
+# rsi
+self._spy = self.add_equity("SPY", Resolution.DAILY)
+self._rsi = self.rsi(self._spy, 5)
+if rsi_value < 55:
+rsi_value = self._rsi.current.value
 
 ```
