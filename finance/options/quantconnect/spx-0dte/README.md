@@ -1,4 +1,8 @@
 
+[tammys_meic.py](https://github.com/pangyuteng/public-scratch/blob/main/finance/options/quantconnect/spx-0dte/tammys_meic.py)
+
+<img width="1529" height="862" alt="image" src="https://github.com/user-attachments/assets/c09ec27c-5d70-46cf-ac10-40edcd07a8a3" />
+
 [iron_condor.py](https://github.com/pangyuteng/public-scratch/blob/main/finance/options/quantconnect/spx-0dte/iron_condor.py)
 
 <img width="967" height="904" alt="image" src="https://github.com/user-attachments/assets/51c1ece9-b912-4777-840b-dbaaccd1bb0e" />
@@ -10,3 +14,4 @@
 [short_put_spread_breakout.py](https://github.com/pangyuteng/public-scratch/blob/main/finance/options/quantconnect/spx-0dte/short_put_spread_breakout.py)
 
 <img width="967" height="904" alt="image" src="https://github.com/user-attachments/assets/b02e0c75-3e95-40f1-85fe-d87542fd1e98" />
+
