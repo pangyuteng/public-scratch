@@ -1,0 +1,102 @@
+
+# Carlo Zarattini, Beat the Market An Effective Intraday Momentum Strategy for S&P500 ETF (SPY)
+# https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4824172
+# https://www.reddit.com/r/algotrading/comments/1nc1p7q/full_deep_dive_into_profitable_0dte_strategy_for/
+
+from AlgorithmImports import *
+
+class VolatilityTradingOptionAlgorithm(QCAlgorithm):
+
+    def initialize(self):
+
+        self.set_start_date(2024, 1, 1)
+        self.set_end_date(2024, 12, 31)
+        
+        self.set_cash(200000)
+
+        self.universe_settings.asynchronous = True
+        self.settings.automatic_indicator_warm_up = True
+        self.universe_settings.resolution = Resolution.MINUTE
+
+        self._vix = self.add_index('VIX')
+        self._spx = self.add_index('SPX')
+        
+        self._spxw = self.add_index_option(self._spx.symbol,"SPXW")
+        self._spxw.set_filter(self.option_filter)
+
+        self._spxw.set_fee_model(TastytradeFeeModel())
+        self._spxw.set_slippage_model(ConstantSlippageModel(0.01))
+
+        self.schedule.on(self.date_rules.every_day(self._spxw.symbol), self.time_rules.after_market_open(self._spxw.symbol, 1), self._mark_market_open)
+        self.schedule.on(self.date_rules.every_day(self._spxw.symbol), self.time_rules.after_market_open(self._spxw.symbol, 60), self._open_trade)
+        self.schedule.on(self.date_rules.every_day(self._spxw.symbol), self.time_rules.every(timedelta(minutes=1)),self._manage_trade)
+        self.schedule.on(self.date_rules.every_day(self._spxw.symbol), self.time_rules.before_market_close(self._spxw.symbol, 1),self._close_trade)
+
+    def option_filter(self, universe):
+        return universe.expiration(0, 0).weeklys_only()
+
+    def _mark_market_open(self):
+        self.spx_open = self._spx.price
+        self.vix_open = self._vix.price
+        self.straddle_open = self._get_straddle_price()
+
+    def _manage_trade(self):
+
+        if self.portfolio.invested:
+            raise ValueError("TODO: implement total_unrealised_profit")
+            self.liquidate()
+
+    def _close_trade(self):
+        if self.portfolio.invested:
+            self.liquidate()
+
+    def _get_straddle_price(self):
+        chain = self.current_slice.option_chains.get(self._spxw.symbol, None)
+        if not chain: return
+
+        expiry = min([x.expiry for x in chain])
+
+        puts = [i for i in chain if i.expiry == expiry and i.right == OptionRight.PUT]
+        if len(puts) == 0: return
+        calls = [i for i in chain if i.expiry == expiry and i.right == OptionRight.CALL]
+        if len(calls) == 0: return
+
+        atm_strike = sorted(puts,key=lambda x: abs(x.strike - self._spx.price ))[0].strike
+        atm_put = [x for x in puts if x.strike == atm_strike][0]
+        atm_call = [x for x in calls if x.strike == atm_strike][0]
+        put_price = (atm_put.ask_price+atm_put.bid_price)/2
+        call_price = (atm_call.ask_price+atm_call.bid_price)/2
+        return call_price+put_price
+
+    def _open_trade(self):
+        if self.straddle_open is None: return
+        straddle_price = self._get_straddle_price()
+        if straddle_price is None: return
+        
+        trade_enter_signal = True if straddle_price < self.straddle_open else False
+        if not self.portfolio.invested and trade_enter_signal:
+
+            chain = self.current_slice.option_chains.get(self._spxw.symbol, None)
+            if not chain: return
+
+            expiry = min([x.expiry for x in chain])
+
+            puts = [i for i in chain if i.expiry == expiry and i.right == OptionRight.PUT]
+            if len(puts) == 0: return
+
+            calls = [i for i in chain if i.expiry == expiry and i.right == OptionRight.CALL]
+            if len(calls) == 0: return
+            
+            puts = sorted([x for x in puts if x.strike < self._spx.price],key=lambda x: x.strike)
+            short_put_strike = sorted(puts,key=lambda x: abs(x.greeks.delta - 0.15*-1 ))[0].strike
+            long_put_strike = sorted(puts,key=lambda x: abs(x.greeks.delta - 0.10*-1 ))[0].strike
+            
+            if not short_put_strike > long_put_strike: return
+
+            quantity = 1
+            strategy = OptionStrategies.bull_put_spread(self._spxw.symbol,short_put_strike,long_put_strike,expiry)
+            self.order(strategy, quantity)
+
+    def on_order_event(self, order_event):
+        if order_event.status == OrderStatus.FILLED and order_event.is_assignment:
+            self.liquidate()
