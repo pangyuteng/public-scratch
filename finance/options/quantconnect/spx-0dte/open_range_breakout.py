@@ -73,7 +73,9 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
             self.liquidate()
 
     def _open_trade(self):
+        # 
         # see figure 1 in https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4824172
+        # below is NOT the referenced implementation
         breakout = True if (self._spx.price/self.spx_open - 1) > 0.002 else False
 
         self.order_ticket = None
