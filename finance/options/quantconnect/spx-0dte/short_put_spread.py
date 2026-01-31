@@ -5,10 +5,10 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
 
     def initialize(self):
 
-        self.set_start_date(2024, 1, 1)
+        self.set_start_date(2022, 1, 1)
         self.set_end_date(2024, 12, 31)
         
-        self.set_cash(200000)
+        self.set_cash(100000)
 
         self.universe_settings.asynchronous = True
         self.settings.automatic_indicator_warm_up = True
@@ -36,15 +36,28 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
         self.vix_open = self._vix.price
 
     def _manage_trade(self):
-        if self.portfolio.invested and self.portfolio.total_unrealised_profit > 0.4:
-            self.liquidate()
+        if self.portfolio.invested:
+            if self.order_ticket is None: # something is wrong, liquidate.
+                self.liquidate()
+                return
+            # take profit at 50%
+            total_holdings_cost = np.sum([float(self.portfolio[ticket.symbol].holdings_cost) for ticket in self.order_ticket])
+            if total_holdings_cost == 0:
+                pass # bad/no data?
+            else:
+                total_unrealized_profit_ratio = self.portfolio.total_unrealised_profit/(-1*total_holdings_cost)
+                if total_unrealized_profit_ratio > 0.5:
+                    self.liquidate()
+                elif total_unrealized_profit_ratio < -3.0:
+                    self.liquidate()
 
     def _close_trade(self):
         if self.portfolio.invested:
             self.liquidate()
+            self.order_ticket = None
 
     def _open_trade(self):
-
+        self.order_ticket = None
         if not self.portfolio.invested:
 
             chain = self.current_slice.option_chains.get(self._spxw.symbol, None)
@@ -66,7 +79,7 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
 
             quantity = 1
             strategy = OptionStrategies.bull_put_spread(self._spxw.symbol,short_put_strike,long_put_strike,expiry)
-            self.order(strategy, quantity)
+            self.order_ticket = self.order(strategy, quantity)
 
     def on_order_event(self, order_event):
         if order_event.status == OrderStatus.FILLED and order_event.is_assignment:

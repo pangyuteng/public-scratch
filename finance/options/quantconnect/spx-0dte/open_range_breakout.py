@@ -51,8 +51,20 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
         self.vix_open = self._vix.price
 
     def _manage_trade(self):
-        if self.portfolio.invested and self.portfolio.total_unrealised_profit > 0.1:
-            self.liquidate()
+        if self.portfolio.invested:
+            if self.order_ticket is None: # something is wrong, liquidate.
+                self.liquidate()
+                return
+            # take profit at 50%
+            total_holdings_cost = np.sum([float(self.portfolio[ticket.symbol].holdings_cost) for ticket in self.order_ticket])
+            if total_holdings_cost == 0:
+                pass # bad/no data?
+            else:
+                total_unrealized_profit_ratio = self.portfolio.total_unrealised_profit/(-1*total_holdings_cost)
+                if total_unrealized_profit_ratio > 0.5:
+                    self.liquidate()
+                elif total_unrealized_profit_ratio < -3.0:
+                    self.liquidate()
 
     def _close_trade(self):
         if self.portfolio.invested:
@@ -61,7 +73,8 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
     def _open_trade(self):
         # see figure 1 in https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4824172
         breakout = True if (self._spx.price/self.spx_open - 1) > 0.002 else False
-        
+
+        self.order_ticket = None
         if not self.portfolio.invested and breakout:
 
             chain = self.current_slice.option_chains.get(self._spxw.symbol, None)
@@ -84,6 +97,7 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
             quantity = 1
             strategy = OptionStrategies.bull_put_spread(self._spxw.symbol,short_put_strike,long_put_strike,expiry)
             self.order(strategy, quantity)
+            self.order_ticket = self.order(strategy, quantity)
 
     def on_order_event(self, order_event):
         if order_event.status == OrderStatus.FILLED and order_event.is_assignment:
