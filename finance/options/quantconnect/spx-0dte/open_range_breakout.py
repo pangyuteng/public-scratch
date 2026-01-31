@@ -20,10 +20,10 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
 
     def initialize(self):
 
-        self.set_start_date(2024, 1, 1)
+        self.set_start_date(2022, 1, 1)
         self.set_end_date(2024, 12, 31)
         
-        self.set_cash(200000)
+        self.set_cash(100000)
 
         self.universe_settings.asynchronous = True
         self.settings.automatic_indicator_warm_up = True
