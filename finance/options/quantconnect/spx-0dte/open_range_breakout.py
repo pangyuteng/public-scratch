@@ -3,8 +3,6 @@
 #
 # [1] Carlo Zarattini, Beat the Market An Effective Intraday Momentum Strategy for S&P500 ETF (SPY)
 #     https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4824172
-#     https://www.quantconnect.com/forum/discussion/17091/beat-the-market-an-effective-intraday-momentum-strategy-for-s-amp-p500-etf-spy/
-#
 # [2] /u/shock_and_awful, Profitably Trading the SPX Opening Range with Option Credit Spreads.
 #     https://substack.com/home/post/p-172286099
 #     https://www.reddit.com/r/algotrading/comments/1nc1p7q/full_deep_dive_into_profitable_0dte_strategy_for
@@ -73,9 +71,7 @@ class VolatilityTradingOptionAlgorithm(QCAlgorithm):
             self.liquidate()
 
     def _open_trade(self):
-        # 
         # see figure 1 in https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4824172
-        # below is NOT the referenced implementation
         breakout = True if (self._spx.price/self.spx_open - 1) > 0.002 else False
 
         self.order_ticket = None
