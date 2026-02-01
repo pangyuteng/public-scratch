@@ -9,10 +9,13 @@
 
 [short_put_spread.py](https://github.com/pangyuteng/public-scratch/blob/main/finance/options/quantconnect/spx-0dte/short_put_spread.py)
 
-???
+<img width="1144" height="853" alt="image" src="https://github.com/user-attachments/assets/5e4ee132-8d16-404f-9792-4a2cfbc33e7c" />
+
 
 [short_put_spread_breakout.py](https://github.com/pangyuteng/public-scratch/blob/main/finance/options/quantconnect/spx-0dte/short_put_spread_breakout.py)
 
-???
+<img width="1144" height="853" alt="image" src="https://github.com/user-attachments/assets/cad4a85e-6357-4840-9175-462af9a23a71" />
+
+
 
 
