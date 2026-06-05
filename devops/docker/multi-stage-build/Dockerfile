@@ -78,7 +78,8 @@ RUN cmake .. \
     -DModule_ITKVtkGlue=ON -DITK_USE_REVIEW=ON && \
     make -j"$(nproc)" && make install -j"$(nproc)"
 
-RUN tar cvzf usrlocal.tar.gz /usr/local
+WORKDIR /
+RUN tar -czf usrlocal.tar.gz /usr/local
 
 FROM mybuilder AS others
 # build zlib
@@ -100,6 +101,7 @@ WORKDIR /opt/sources/boost
 # RUN ./bootstrap.sh --prefix=$MYPATH --with-python=python3.11 \
 #     --with-libraries=python,filesystem,system,test,iostreams && \
 #     ./b2 install
+# # don't think we need `--with-python`
 
 RUN ./bootstrap.sh --prefix=$MYPATH \
     --with-libraries=filesystem,system,test,iostreams && \
@@ -108,7 +110,7 @@ RUN ./bootstrap.sh --prefix=$MYPATH \
 # build dcmtk
 WORKDIR /opt/sources
 RUN mkdir -p /opt/sources/dcmtk
-RUN wget --quiet https://github.com/DCMTK/dcmtk/archive/DCMTK-3.7.0.tar.gz -O dcmtk.tar.gz && \
+RUN wget --quiet https://github.com/DCMTK/dcmtk/archive/DCMTK-3.6.4.tar.gz -O dcmtk.tar.gz && \
     tar -xzf dcmtk.tar.gz -C /opt/sources/dcmtk --strip-components 1
 WORKDIR /opt/sources/dcmtk
 RUN mkdir build
@@ -134,7 +136,8 @@ RUN cmake .. \
     -DGDCM_BUILD_SHARED_LIBS=1 && \
     make -j"$(nproc)" && make install -j"$(nproc)"
 
-RUN tar cvzf usrlocal.tar.gz /usr/local
+WORKDIR /
+RUN tar --exclude=/usr/local/lib/python3.11 -czf usrlocal.tar.gz /usr/local
 
 # 
 # NOTE: to use multi stage building...just use tar to maintain path
@@ -146,8 +149,8 @@ ENV MAIN_LIBRARYDIR=/usr/local/lib
 ENV LD_LIBRARY_PATH=$MAIN_LIBRARYDIR
 
 WORKDIR /
-COPY --from=vtkitk /opt/sources/usrlocal.tar.gz /usrlocal-vtkitk.tar.gz
-COPY --from=others /opt/sources/usrlocal.tar.gz /usrlocal-others.tar.gz
+COPY --from=vtkitk /usrlocal.tar.gz /usrlocal-vtkitk.tar.gz
+COPY --from=others /usrlocal.tar.gz /usrlocal-others.tar.gz
 RUN tar xfz /usrlocal-vtkitk.tar.gz && tar xfz /usrlocal-others.tar.gz && \
     rm /usrlocal-vtkitk.tar.gz /usrlocal-others.tar.gz
 
@@ -165,4 +168,4 @@ RUN tar \
     /usr/local/lib
 RUN tar -cvzf gdcm.tar.gz /usr/local/bin/gdcm*
 
-# WORKDIR /opt
+WORKDIR /opt
