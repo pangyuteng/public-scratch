@@ -1,0 +1,13 @@
+FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install git vim jq curl procps -yq
+
+RUN apt-get install -yq \
+    libinsighttoolkit5-dev libvtk9-dev \
+    zlib1g-dev libgdcm-dev libboost-all-dev libdcmtk-dev
+
+
+#USER root
