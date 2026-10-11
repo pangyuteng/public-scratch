@@ -2,7 +2,7 @@
 
 ```
 
-docker run -it --env TASTYTRADE_XXX --env TASTYTRADE_XXXX \
+docker run -it --env TASTYTRADE_XXX --env TASTYTRADE_XXXX --env HFD_TOKEN \
 -v ${PWD}:/opt -w /opt -p 8888:8888 pangyuteng/tasty bash 
 ```
 
